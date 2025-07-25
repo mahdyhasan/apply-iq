@@ -110,17 +110,44 @@ export default function Login() {
                   <span className="bg-white px-2 text-gray-500">Demo Credentials</span>
                 </div>
               </div>
-              
-              <div className="mt-4 space-y-2 text-sm text-gray-600">
+
+              <div className="mt-4 space-y-3">
                 <div className="p-3 bg-blue-50 rounded-lg">
-                  <p><strong>User Account:</strong></p>
-                  <p>Email: user@applyiq.com</p>
-                  <p>Password: user123</p>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="font-medium">User Account (Bundle Plan)</p>
+                      <p className="text-sm text-gray-600">user@applyiq.com / user123</p>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setEmail("user@applyiq.com");
+                        setPassword("user123");
+                        handleLogin({ preventDefault: () => {} } as React.FormEvent);
+                      }}
+                    >
+                      Quick Login
+                    </Button>
+                  </div>
                 </div>
                 <div className="p-3 bg-gray-50 rounded-lg">
-                  <p><strong>Admin Account:</strong></p>
-                  <p>Email: admin@applyiq.com</p>
-                  <p>Password: admin123</p>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="font-medium">Admin Account</p>
+                      <p className="text-sm text-gray-600">admin@applyiq.com / admin123</p>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setEmail("admin@applyiq.com");
+                        setPassword("admin123");
+                        handleLogin({ preventDefault: () => {} } as React.FormEvent);
+                      }}
+                    >
+                      Quick Login
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
