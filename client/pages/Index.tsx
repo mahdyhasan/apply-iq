@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BrainCircuit, FileText, PresentationChart, Users, CheckCircle, Star, ArrowRight, Menu, X } from "lucide-react";
+import { BrainCircuit, FileText, Presentation, Users, CheckCircle, Star, ArrowRight, Menu, X } from "lucide-react";
 
 export default function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
