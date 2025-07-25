@@ -118,17 +118,37 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="text-center py-8">
-                    <div className="text-4xl mb-4">🚧</div>
-                    <h3 className="text-lg font-semibold mb-2">Coming in Phase 4!</h3>
-                    <p className="text-gray-600 text-sm mb-4">
-                      This dashboard will include topic input, AI-generated notes, 
-                      MCQs, slide decks, and export options.
-                    </p>
-                    <Button variant="outline" disabled>
-                      Access Educator Tools
-                    </Button>
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-primary">12</div>
+                      <div className="text-sm text-gray-600">Notes Created</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-green-600">8</div>
+                      <div className="text-sm text-gray-600">MCQ Sets</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-purple-600">5</div>
+                      <div className="text-sm text-gray-600">Slide Decks</div>
+                    </div>
                   </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Multiple teaching styles</span>
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Export to PDF, DOC, PPT</span>
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Content library</span>
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                    </div>
+                  </div>
+                  <Button asChild className="w-full">
+                    <Link to="/educator-tools">Access Educator Tools</Link>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
