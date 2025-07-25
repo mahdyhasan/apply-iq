@@ -11,6 +11,9 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
+import AdminDashboard from "./pages/AdminDashboard";
+import ResumeAssistant from "./pages/ResumeAssistant";
+import EducatorTools from "./pages/EducatorTools";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
