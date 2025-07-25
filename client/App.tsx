@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import TestDashboard from "./pages/TestDashboard";
 import Admin from "./pages/Admin";
 import AdminDashboard from "./pages/AdminDashboard";
 import ResumeAssistant from "./pages/ResumeAssistant";
