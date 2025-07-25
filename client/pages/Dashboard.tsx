@@ -93,7 +93,7 @@ export default function Dashboard() {
             <Card className="border-2 border-blue-100 hover:border-primary transition-colors cursor-pointer">
               <CardHeader>
                 <div className="flex items-center space-x-3">
-                  <PresentationChart className="h-8 w-8 text-primary" />
+                  <Presentation className="h-8 w-8 text-primary" />
                   <div>
                     <CardTitle className="text-xl">Notes & Slide Generator</CardTitle>
                     <CardDescription>AI-powered content creation for educators</CardDescription>
