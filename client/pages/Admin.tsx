@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BrainCircuit, Users, Settings, LogOut, Shield, BarChart3, Database } from "lucide-react";
+import { BrainCircuit, Users, Settings, LogOut, Shield, BarChart, Database } from "lucide-react";
 
 export default function Admin() {
   const [user, setUser] = useState<any>(null);
