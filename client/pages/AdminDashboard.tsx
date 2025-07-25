@@ -10,6 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Switch } from "@/components/ui/switch";
+import { Progress } from "@/components/ui/progress";
 import { 
   Users, 
   Settings, 
@@ -32,7 +34,36 @@ import {
   DollarSign,
   Crown,
   Mail,
-  Calendar
+  Calendar,
+  Shield,
+  Server,
+  Globe,
+  FileText,
+  Key,
+  Zap,
+  Cpu,
+  HardDrive,
+  Wifi,
+  Lock,
+  UserCheck,
+  UserX,
+  CreditCard,
+  PieChart,
+  LineChart,
+  Filter,
+  Upload,
+  Archive,
+  CloudDownload,
+  Workflow,
+  Bug,
+  AlertCircle,
+  Lightbulb,
+  Target,
+  Gauge,
+  Monitor,
+  Bell,
+  Code,
+  Sliders
 } from "lucide-react";
 
 interface User {
@@ -40,10 +71,22 @@ interface User {
   name: string;
   email: string;
   plan: string;
-  status: "active" | "inactive" | "suspended";
+  status: "active" | "inactive" | "suspended" | "trial";
   joinDate: string;
   lastActive: string;
+  ipAddress: string;
+  country: string;
+  device: string;
+  totalSpent: number;
   usage: {
+    jobMatches: number;
+    coverLetters: number;
+    notesGenerated: number;
+    mcqsCreated: number;
+    apiCalls: number;
+    storageUsed: number;
+  };
+  limits: {
     jobMatches: number;
     coverLetters: number;
     notesGenerated: number;
@@ -51,21 +94,32 @@ interface User {
   };
 }
 
-interface SystemLog {
-  id: string;
-  timestamp: string;
-  type: "info" | "warning" | "error";
-  message: string;
-  component: string;
-}
-
-interface JobBoard {
+interface SystemMetric {
   id: string;
   name: string;
-  url: string;
-  status: "active" | "inactive" | "error";
-  lastScrape: string;
-  jobsFound: number;
+  value: number;
+  unit: string;
+  status: "healthy" | "warning" | "critical";
+  trend: "up" | "down" | "stable";
+  lastUpdated: string;
+}
+
+interface APIKey {
+  id: string;
+  name: string;
+  service: string;
+  status: "active" | "inactive" | "expired";
+  usage: number;
+  limit: number;
+  expiresAt: string;
+}
+
+interface BackupRecord {
+  id: string;
+  type: "full" | "incremental" | "user-data";
+  size: string;
+  createdAt: string;
+  status: "completed" | "in-progress" | "failed";
 }
 
 const mockUsers: User[] = [
@@ -77,11 +131,23 @@ const mockUsers: User[] = [
     status: "active",
     joinDate: "2024-01-15",
     lastActive: "2024-01-20",
+    ipAddress: "192.168.1.100",
+    country: "United States",
+    device: "Desktop",
+    totalSpent: 45,
     usage: {
       jobMatches: 45,
       coverLetters: 12,
       notesGenerated: 23,
-      mcqsCreated: 8
+      mcqsCreated: 8,
+      apiCalls: 156,
+      storageUsed: 2.3
+    },
+    limits: {
+      jobMatches: 100,
+      coverLetters: 50,
+      notesGenerated: 100,
+      mcqsCreated: 50
     }
   },
   {
@@ -89,12 +155,24 @@ const mockUsers: User[] = [
     name: "Jane Smith",
     email: "jane.smith@example.com",
     plan: "resume",
-    status: "active",
+    status: "trial",
     joinDate: "2024-01-10",
     lastActive: "2024-01-19",
+    ipAddress: "10.0.0.45",
+    country: "Canada",
+    device: "Mobile",
+    totalSpent: 0,
     usage: {
-      jobMatches: 32,
-      coverLetters: 8,
+      jobMatches: 5,
+      coverLetters: 2,
+      notesGenerated: 0,
+      mcqsCreated: 0,
+      apiCalls: 23,
+      storageUsed: 0.1
+    },
+    limits: {
+      jobMatches: 10,
+      coverLetters: 5,
       notesGenerated: 0,
       mcqsCreated: 0
     }
@@ -104,131 +182,93 @@ const mockUsers: User[] = [
     name: "Mike Johnson",
     email: "mike@education.com",
     plan: "notes",
-    status: "inactive",
+    status: "suspended",
     joinDate: "2024-01-05",
     lastActive: "2024-01-18",
+    ipAddress: "203.45.67.89",
+    country: "United Kingdom",
+    device: "Tablet",
+    totalSpent: 36,
     usage: {
       jobMatches: 0,
       coverLetters: 0,
       notesGenerated: 156,
-      mcqsCreated: 42
+      mcqsCreated: 42,
+      apiCalls: 289,
+      storageUsed: 5.7
+    },
+    limits: {
+      jobMatches: 0,
+      coverLetters: 0,
+      notesGenerated: 200,
+      mcqsCreated: 100
     }
   }
 ];
 
-const mockLogs: SystemLog[] = [
-  {
-    id: "1",
-    timestamp: "2024-01-20 14:30:22",
-    type: "info",
-    message: "Job scraping completed successfully - 1,234 new jobs found",
-    component: "Job Scraper"
-  },
-  {
-    id: "2",
-    timestamp: "2024-01-20 14:15:10",
-    type: "warning",
-    message: "High API usage detected - 95% of daily limit reached",
-    component: "OpenAI API"
-  },
-  {
-    id: "3",
-    timestamp: "2024-01-20 13:45:33",
-    type: "error",
-    message: "Failed to scrape Indeed.com - Rate limit exceeded",
-    component: "Job Scraper"
-  },
-  {
-    id: "4",
-    timestamp: "2024-01-20 12:20:15",
-    type: "info",
-    message: "New user registration: jane.smith@example.com",
-    component: "Auth System"
-  }
+const mockSystemMetrics: SystemMetric[] = [
+  { id: "1", name: "CPU Usage", value: 72, unit: "%", status: "warning", trend: "up", lastUpdated: "2 mins ago" },
+  { id: "2", name: "Memory Usage", value: 64, unit: "%", status: "healthy", trend: "stable", lastUpdated: "2 mins ago" },
+  { id: "3", name: "Disk Space", value: 85, unit: "%", status: "warning", trend: "up", lastUpdated: "2 mins ago" },
+  { id: "4", name: "API Response Time", value: 245, unit: "ms", status: "healthy", trend: "down", lastUpdated: "1 min ago" },
+  { id: "5", name: "Active Connections", value: 1247, unit: "", status: "healthy", trend: "up", lastUpdated: "1 min ago" },
+  { id: "6", name: "Error Rate", value: 0.2, unit: "%", status: "healthy", trend: "stable", lastUpdated: "3 mins ago" }
 ];
 
-const mockJobBoards: JobBoard[] = [
-  {
-    id: "1",
-    name: "LinkedIn Jobs",
-    url: "https://linkedin.com/jobs",
-    status: "active",
-    lastScrape: "2024-01-20 14:30:00",
-    jobsFound: 456
-  },
-  {
-    id: "2",
-    name: "Indeed",
-    url: "https://indeed.com",
-    status: "error",
-    lastScrape: "2024-01-20 13:45:00",
-    jobsFound: 0
-  },
-  {
-    id: "3",
-    name: "Glassdoor",
-    url: "https://glassdoor.com",
-    status: "active",
-    lastScrape: "2024-01-20 14:25:00",
-    jobsFound: 234
-  },
-  {
-    id: "4",
-    name: "AngelList",
-    url: "https://angel.co",
-    status: "active",
-    lastScrape: "2024-01-20 14:20:00",
-    jobsFound: 123
-  }
+const mockAPIKeys: APIKey[] = [
+  { id: "1", name: "OpenAI GPT-4", service: "openai", status: "active", usage: 85000, limit: 100000, expiresAt: "2024-12-31" },
+  { id: "2", name: "Google Search API", service: "google", status: "active", usage: 450, limit: 1000, expiresAt: "2024-06-30" },
+  { id: "3", name: "News API", service: "newsapi", status: "active", usage: 2340, limit: 5000, expiresAt: "2024-08-15" },
+  { id: "4", name: "LinkedIn Scraper", service: "linkedin", status: "inactive", usage: 0, limit: 1000, expiresAt: "2024-03-31" }
+];
+
+const mockBackups: BackupRecord[] = [
+  { id: "1", type: "full", size: "2.4 GB", createdAt: "2024-01-20 02:00", status: "completed" },
+  { id: "2", type: "incremental", size: "156 MB", createdAt: "2024-01-19 02:00", status: "completed" },
+  { id: "3", type: "user-data", size: "892 MB", createdAt: "2024-01-18 02:00", status: "completed" },
+  { id: "4", type: "full", size: "2.3 GB", createdAt: "2024-01-17 02:00", status: "completed" }
 ];
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [users, setUsers] = useState<User[]>(mockUsers);
-  const [logs, setLogs] = useState<SystemLog[]>(mockLogs);
-  const [jobBoards, setJobBoards] = useState<JobBoard[]>(mockJobBoards);
+  const [metrics] = useState<SystemMetric[]>(mockSystemMetrics);
+  const [apiKeys, setApiKeys] = useState<APIKey[]>(mockAPIKeys);
+  const [backups] = useState<BackupRecord[]>(mockBackups);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [announcement, setAnnouncement] = useState("");
+  const [systemAlerts, setSystemAlerts] = useState([
+    { id: "1", type: "warning", message: "High API usage detected - 95% of daily limit reached", timestamp: "5 mins ago" },
+    { id: "2", type: "info", message: "Scheduled maintenance in 2 hours", timestamp: "1 hour ago" },
+    { id: "3", type: "error", message: "Failed to scrape Indeed.com - Rate limit exceeded", timestamp: "2 hours ago" }
+  ]);
 
   const filteredUsers = users.filter(user => 
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.plan.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "active": return <Badge className="bg-green-100 text-green-800">Active</Badge>;
-      case "inactive": return <Badge className="bg-yellow-100 text-yellow-800">Inactive</Badge>;
-      case "suspended": return <Badge className="bg-red-100 text-red-800">Suspended</Badge>;
-      case "error": return <Badge className="bg-red-100 text-red-800">Error</Badge>;
-      default: return <Badge variant="secondary">{status}</Badge>;
-    }
+    const variants = {
+      active: "bg-green-100 text-green-800",
+      inactive: "bg-yellow-100 text-yellow-800", 
+      suspended: "bg-red-100 text-red-800",
+      trial: "bg-blue-100 text-blue-800",
+      error: "bg-red-100 text-red-800",
+      expired: "bg-gray-100 text-gray-800"
+    };
+    return <Badge className={variants[status as keyof typeof variants] || "bg-gray-100 text-gray-800"}>{status}</Badge>;
   };
 
-  const getLogIcon = (type: string) => {
-    switch (type) {
-      case "info": return <CheckCircle className="h-4 w-4 text-blue-500" />;
+  const getMetricIcon = (status: string) => {
+    switch (status) {
+      case "healthy": return <CheckCircle className="h-4 w-4 text-green-500" />;
       case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case "error": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+      case "critical": return <AlertCircle className="h-4 w-4 text-red-500" />;
       default: return <Clock className="h-4 w-4 text-gray-500" />;
     }
-  };
-
-  const sendAnnouncement = () => {
-    if (!announcement.trim()) return;
-    
-    // Simulate sending announcement
-    const newLog: SystemLog = {
-      id: Date.now().toString(),
-      timestamp: new Date().toLocaleString(),
-      type: "info",
-      message: `System announcement sent to all users: "${announcement.substring(0, 50)}..."`,
-      component: "Admin Panel"
-    };
-    
-    setLogs([newLog, ...logs]);
-    setAnnouncement("");
   };
 
   const toggleUserStatus = (userId: string) => {
@@ -239,31 +279,67 @@ export default function AdminDashboard() {
     ));
   };
 
-  const toggleJobBoard = (boardId: string) => {
-    setJobBoards(jobBoards.map(board => 
-      board.id === boardId 
-        ? { ...board, status: board.status === "active" ? "inactive" : "active" as const }
-        : board
+  const toggleAPIKey = (keyId: string) => {
+    setApiKeys(apiKeys.map(key => 
+      key.id === keyId 
+        ? { ...key, status: key.status === "active" ? "inactive" : "active" as const }
+        : key
     ));
+  };
+
+  const exportUsers = (format: string) => {
+    const data = format === "csv" 
+      ? users.map(u => `${u.name},${u.email},${u.plan},${u.status},${u.joinDate}`).join('\n')
+      : JSON.stringify(users, null, 2);
+    
+    const blob = new Blob([data], { type: format === "csv" ? "text/csv" : "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `users.${format}`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const sendSystemAlert = (type: string, message: string) => {
+    const newAlert = {
+      id: Date.now().toString(),
+      type,
+      message,
+      timestamp: "Just now"
+    };
+    setSystemAlerts([newAlert, ...systemAlerts.slice(0, 9)]);
   };
 
   const totalUsers = users.length;
   const activeUsers = users.filter(u => u.status === "active").length;
-  const totalRevenue = users.reduce((sum, user) => {
-    const planPrices = { bundle: 15, resume: 9, notes: 12 };
-    return sum + (planPrices[user.plan as keyof typeof planPrices] || 0);
-  }, 0);
+  const trialUsers = users.filter(u => u.status === "trial").length;
+  const totalRevenue = users.reduce((sum, user) => sum + user.totalSpent, 0);
+  const avgUsage = users.reduce((sum, user) => sum + user.usage.apiCalls, 0) / users.length;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-          <p className="text-gray-600">Comprehensive platform management and analytics</p>
+        {/* Header */}
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Control Center</h1>
+            <p className="text-gray-600">Advanced platform management and system monitoring</p>
+          </div>
+          <div className="flex items-center space-x-3">
+            <Badge variant="outline" className="text-green-600">
+              <Activity className="h-3 w-3 mr-1" />
+              System Healthy
+            </Badge>
+            <Button variant="outline" size="sm">
+              <Bell className="h-4 w-4 mr-2" />
+              Alerts ({systemAlerts.length})
+            </Button>
+          </div>
         </div>
 
-        {/* Quick Stats */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
+        {/* Quick Stats Grid */}
+        <div className="grid md:grid-cols-6 gap-6 mb-8">
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -285,7 +361,7 @@ export default function AdminDashboard() {
                   <p className="text-3xl font-bold">{activeUsers}</p>
                   <p className="text-sm text-gray-500">{Math.round((activeUsers / totalUsers) * 100)}% active</p>
                 </div>
-                <Activity className="h-8 w-8 text-green-500" />
+                <UserCheck className="h-8 w-8 text-green-500" />
               </div>
             </CardContent>
           </Card>
@@ -294,7 +370,20 @@ export default function AdminDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
+                  <p className="text-sm font-medium text-gray-600">Trial Users</p>
+                  <p className="text-3xl font-bold">{trialUsers}</p>
+                  <p className="text-sm text-blue-600">Converting 23%</p>
+                </div>
+                <Crown className="h-8 w-8 text-blue-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Revenue</p>
                   <p className="text-3xl font-bold">${totalRevenue}</p>
                   <p className="text-sm text-green-600">+15% this month</p>
                 </div>
@@ -307,37 +396,147 @@ export default function AdminDashboard() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">System Health</p>
-                  <p className="text-3xl font-bold text-green-600">98.5%</p>
-                  <p className="text-sm text-gray-500">Uptime</p>
+                  <p className="text-sm font-medium text-gray-600">API Calls</p>
+                  <p className="text-3xl font-bold">{Math.round(avgUsage)}</p>
+                  <p className="text-sm text-gray-500">avg/user</p>
                 </div>
-                <CheckCircle className="h-8 w-8 text-green-500" />
+                <Zap className="h-8 w-8 text-yellow-500" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Uptime</p>
+                  <p className="text-3xl font-bold text-green-600">99.9%</p>
+                  <p className="text-sm text-gray-500">30 days</p>
+                </div>
+                <Gauge className="h-8 w-8 text-green-500" />
               </div>
             </CardContent>
           </Card>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-8">
             <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="users">User Management</TabsTrigger>
+            <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="settings">Platform Settings</TabsTrigger>
-            <TabsTrigger value="logs">System Logs</TabsTrigger>
+            <TabsTrigger value="system">System</TabsTrigger>
+            <TabsTrigger value="api">API Management</TabsTrigger>
+            <TabsTrigger value="billing">Billing</TabsTrigger>
+            <TabsTrigger value="security">Security</TabsTrigger>
+            <TabsTrigger value="tools">Tools</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
+              {/* System Health */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Monitor className="h-5 w-5" />
+                    <span>System Health</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {metrics.slice(0, 4).map((metric) => (
+                      <div key={metric.id} className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          {getMetricIcon(metric.status)}
+                          <div>
+                            <p className="font-medium">{metric.name}</p>
+                            <p className="text-sm text-gray-500">{metric.lastUpdated}</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold">{metric.value}{metric.unit}</p>
+                          <div className="w-20 bg-gray-200 rounded-full h-2">
+                            <div 
+                              className={`h-2 rounded-full ${
+                                metric.status === "healthy" ? "bg-green-500" :
+                                metric.status === "warning" ? "bg-yellow-500" : "bg-red-500"
+                              }`}
+                              style={{width: `${Math.min(metric.value, 100)}%`}}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Recent Alerts */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <AlertTriangle className="h-5 w-5" />
+                    <span>Recent Alerts</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {systemAlerts.slice(0, 5).map((alert) => (
+                      <div key={alert.id} className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50">
+                        {alert.type === "warning" && <AlertTriangle className="h-4 w-4 text-yellow-500 mt-1" />}
+                        {alert.type === "error" && <AlertCircle className="h-4 w-4 text-red-500 mt-1" />}
+                        {alert.type === "info" && <CheckCircle className="h-4 w-4 text-blue-500 mt-1" />}
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{alert.message}</p>
+                          <p className="text-xs text-gray-500">{alert.timestamp}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Actions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Workflow className="h-5 w-5" />
+                    <span>Quick Actions</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Button 
+                      variant="outline" 
+                      className="flex items-center space-x-2"
+                      onClick={() => sendSystemAlert("info", "Manual backup initiated")}
+                    >
+                      <Archive className="h-4 w-4" />
+                      <span>Backup Now</span>
+                    </Button>
+                    <Button variant="outline" className="flex items-center space-x-2">
+                      <RefreshCw className="h-4 w-4" />
+                      <span>Restart Services</span>
+                    </Button>
+                    <Button variant="outline" className="flex items-center space-x-2">
+                      <Download className="h-4 w-4" />
+                      <span>Export Logs</span>
+                    </Button>
+                    <Button variant="outline" className="flex items-center space-x-2">
+                      <Sliders className="h-4 w-4" />
+                      <span>System Config</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Send Announcement */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <MessageSquare className="h-5 w-5" />
-                    <span>Send Announcement</span>
+                    <span>System Announcements</span>
                   </CardTitle>
-                  <CardDescription>
-                    Send system-wide notifications to all users
-                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Textarea
@@ -346,105 +545,37 @@ export default function AdminDashboard() {
                     onChange={(e) => setAnnouncement(e.target.value)}
                     className="min-h-[100px]"
                   />
-                  <Button onClick={sendAnnouncement} disabled={!announcement.trim()}>
-                    <Mail className="h-4 w-4 mr-2" />
-                    Send to All Users
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Activity className="h-5 w-5" />
-                    <span>Recent Activity</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {logs.slice(0, 5).map((log) => (
-                      <div key={log.id} className="flex items-start space-x-3">
-                        {getLogIcon(log.type)}
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium">{log.message}</p>
-                          <p className="text-xs text-gray-500">{log.timestamp}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Database className="h-5 w-5" />
-                    <span>Job Board Status</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {jobBoards.map((board) => (
-                      <div key={board.id} className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">{board.name}</p>
-                          <p className="text-sm text-gray-500">{board.jobsFound} jobs found</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          {getStatusBadge(board.status)}
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => toggleJobBoard(board.id)}
-                          >
-                            {board.status === "active" ? "Disable" : "Enable"}
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <BarChart className="h-5 w-5" />
-                    <span>Usage Statistics</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Total Job Matches</span>
-                      <span className="font-semibold">1,234</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Cover Letters Generated</span>
-                      <span className="font-semibold">456</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">Notes Created</span>
-                      <span className="font-semibold">789</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm">MCQs Generated</span>
-                      <span className="font-semibold">234</span>
-                    </div>
+                  <div className="flex space-x-2">
+                    <Button 
+                      onClick={() => {
+                        if (announcement.trim()) {
+                          sendSystemAlert("info", `Announcement sent: "${announcement.substring(0, 50)}..."`);
+                          setAnnouncement("");
+                        }
+                      }} 
+                      disabled={!announcement.trim()}
+                      className="flex-1"
+                    >
+                      <Mail className="h-4 w-4 mr-2" />
+                      Send to All Users
+                    </Button>
+                    <Button variant="outline" onClick={() => setAnnouncement("")}>
+                      Clear
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
             </div>
           </TabsContent>
 
-          {/* Users Tab */}
+          {/* Enhanced Users Tab */}
           <TabsContent value="users" className="space-y-6">
             <Card>
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle className="flex items-center space-x-2">
                     <Users className="h-5 w-5" />
-                    <span>User Management</span>
+                    <span>Advanced User Management</span>
                   </CardTitle>
                   <div className="flex items-center space-x-2">
                     <div className="relative">
@@ -453,12 +584,33 @@ export default function AdminDashboard() {
                         placeholder="Search users..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10"
+                        className="pl-10 w-64"
                       />
                     </div>
-                    <Button variant="outline">
+                    <Select defaultValue="all">
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Status</SelectItem>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="trial">Trial</SelectItem>
+                        <SelectItem value="suspended">Suspended</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button 
+                      variant="outline"
+                      onClick={() => exportUsers("csv")}
+                    >
                       <Download className="h-4 w-4 mr-2" />
-                      Export
+                      Export CSV
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={() => exportUsers("json")}
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Export JSON
                     </Button>
                   </div>
                 </div>
@@ -470,9 +622,10 @@ export default function AdminDashboard() {
                       <TableHead>User</TableHead>
                       <TableHead>Plan</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead>Join Date</TableHead>
-                      <TableHead>Last Active</TableHead>
                       <TableHead>Usage</TableHead>
+                      <TableHead>Location</TableHead>
+                      <TableHead>Revenue</TableHead>
+                      <TableHead>Last Active</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -483,6 +636,7 @@ export default function AdminDashboard() {
                           <div>
                             <p className="font-medium">{user.name}</p>
                             <p className="text-sm text-gray-500">{user.email}</p>
+                            <p className="text-xs text-gray-400">{user.device}</p>
                           </div>
                         </TableCell>
                         <TableCell>
@@ -491,14 +645,32 @@ export default function AdminDashboard() {
                           </Badge>
                         </TableCell>
                         <TableCell>{getStatusBadge(user.status)}</TableCell>
-                        <TableCell>{user.joinDate}</TableCell>
-                        <TableCell>{user.lastActive}</TableCell>
                         <TableCell>
                           <div className="text-sm">
-                            <p>Jobs: {user.usage.jobMatches}</p>
-                            <p>Notes: {user.usage.notesGenerated}</p>
+                            <div className="flex justify-between">
+                              <span>API:</span>
+                              <span className="font-medium">{user.usage.apiCalls}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Storage:</span>
+                              <span className="font-medium">{user.usage.storageUsed}GB</span>
+                            </div>
+                            <Progress 
+                              value={(user.usage.apiCalls / (user.limits.jobMatches + user.limits.coverLetters + user.limits.notesGenerated)) * 100} 
+                              className="h-1 mt-1"
+                            />
                           </div>
                         </TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            <p>{user.country}</p>
+                            <p className="text-gray-500">{user.ipAddress}</p>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="font-medium">${user.totalSpent}</div>
+                        </TableCell>
+                        <TableCell>{user.lastActive}</TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
                             <Button
@@ -513,7 +685,16 @@ export default function AdminDashboard() {
                               size="sm"
                               onClick={() => toggleUserStatus(user.id)}
                             >
-                              {user.status === "active" ? "Suspend" : "Activate"}
+                              {user.status === "active" ? 
+                                <UserX className="h-4 w-4" /> : 
+                                <UserCheck className="h-4 w-4" />
+                              }
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                            >
+                              <Mail className="h-4 w-4" />
                             </Button>
                           </div>
                         </TableCell>
@@ -525,12 +706,15 @@ export default function AdminDashboard() {
             </Card>
           </TabsContent>
 
-          {/* Analytics Tab */}
+          {/* Enhanced Analytics Tab */}
           <TabsContent value="analytics" className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Revenue Analytics</CardTitle>
+                  <CardTitle className="flex items-center space-x-2">
+                    <PieChart className="h-5 w-5" />
+                    <span>Revenue Analytics</span>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -542,6 +726,10 @@ export default function AdminDashboard() {
                       <span>Last Month</span>
                       <span className="text-lg">${Math.round(totalRevenue * 0.85)}</span>
                     </div>
+                    <div className="flex justify-between items-center">
+                      <span>YTD</span>
+                      <span className="text-lg">${Math.round(totalRevenue * 3.2)}</span>
+                    </div>
                     <div className="flex items-center space-x-2 text-green-600">
                       <TrendingUp className="h-4 w-4" />
                       <span className="text-sm">+15% growth</span>
@@ -552,35 +740,262 @@ export default function AdminDashboard() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Plan Distribution</CardTitle>
+                  <CardTitle className="flex items-center space-x-2">
+                    <LineChart className="h-5 w-5" />
+                    <span>Usage Trends</span>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span>Bundle Plan</span>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-16 bg-gray-200 rounded-full h-2">
-                          <div className="bg-blue-600 h-2 rounded-full" style={{width: "40%"}}></div>
+                      <span>Total API Calls</span>
+                      <span className="text-2xl font-bold">12,456</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Peak Usage</span>
+                      <span className="text-lg">2:00 PM - 4:00 PM</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Avg Response Time</span>
+                      <span className="text-lg">245ms</span>
+                    </div>
+                    <div className="flex items-center space-x-2 text-blue-600">
+                      <TrendingUp className="h-4 w-4" />
+                      <span className="text-sm">+8% usage increase</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* System Monitoring Tab */}
+          <TabsContent value="system" className="space-y-6">
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Server className="h-5 w-5" />
+                    <span>Server Status</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {metrics.map((metric) => (
+                      <div key={metric.id} className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          {getMetricIcon(metric.status)}
+                          <span className="text-sm">{metric.name}</span>
                         </div>
-                        <span className="text-sm">40%</span>
+                        <span className="font-medium">{metric.value}{metric.unit}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Database className="h-5 w-5" />
+                    <span>Database Health</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <span>Connections</span>
+                      <span className="font-medium">47/100</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Query Time</span>
+                      <span className="font-medium">12ms</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Cache Hit Rate</span>
+                      <span className="font-medium">98.5%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Storage Used</span>
+                      <span className="font-medium">2.3GB</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Wifi className="h-5 w-5" />
+                    <span>Network Status</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <span>Bandwidth</span>
+                      <span className="font-medium">45MB/s</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Latency</span>
+                      <span className="font-medium">23ms</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Packet Loss</span>
+                      <span className="font-medium">0.01%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>CDN Status</span>
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* API Management Tab */}
+          <TabsContent value="api" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Key className="h-5 w-5" />
+                  <span>API Key Management</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Service</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Usage</TableHead>
+                      <TableHead>Limit</TableHead>
+                      <TableHead>Expires</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {apiKeys.map((key) => (
+                      <TableRow key={key.id}>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium">{key.name}</p>
+                            <p className="text-sm text-gray-500">{key.service}</p>
+                          </div>
+                        </TableCell>
+                        <TableCell>{getStatusBadge(key.status)}</TableCell>
+                        <TableCell>
+                          <div>
+                            <div className="flex justify-between text-sm">
+                              <span>{key.usage.toLocaleString()}</span>
+                              <span>{Math.round((key.usage / key.limit) * 100)}%</span>
+                            </div>
+                            <Progress value={(key.usage / key.limit) * 100} className="h-1 mt-1" />
+                          </div>
+                        </TableCell>
+                        <TableCell>{key.limit.toLocaleString()}</TableCell>
+                        <TableCell>{key.expiresAt}</TableCell>
+                        <TableCell>
+                          <div className="flex space-x-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => toggleAPIKey(key.id)}
+                            >
+                              {key.status === "active" ? "Disable" : "Enable"}
+                            </Button>
+                            <Button variant="outline" size="sm">
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Billing Management Tab */}
+          <TabsContent value="billing" className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <CreditCard className="h-5 w-5" />
+                    <span>Revenue Overview</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600">Today</p>
+                        <p className="text-2xl font-bold">$12</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600">This Week</p>
+                        <p className="text-2xl font-bold">$89</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600">This Month</p>
+                        <p className="text-2xl font-bold">${totalRevenue}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span>Bundle Plans</span>
+                        <span>$45 (65%)</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Resume Plans</span>
+                        <span>$18 (25%)</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Notes Plans</span>
+                        <span>$12 (10%)</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Target className="h-5 w-5" />
+                    <span>Conversion Metrics</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span>Trial to Paid</span>
+                      <div className="text-right">
+                        <span className="font-bold">23%</span>
+                        <div className="w-20 bg-gray-200 rounded-full h-2 mt-1">
+                          <div className="bg-green-500 h-2 rounded-full w-[23%]"></div>
+                        </div>
                       </div>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span>Resume Plan</span>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-16 bg-gray-200 rounded-full h-2">
-                          <div className="bg-green-600 h-2 rounded-full" style={{width: "35%"}}></div>
+                      <span>Monthly Retention</span>
+                      <div className="text-right">
+                        <span className="font-bold">87%</span>
+                        <div className="w-20 bg-gray-200 rounded-full h-2 mt-1">
+                          <div className="bg-blue-500 h-2 rounded-full w-[87%]"></div>
                         </div>
-                        <span className="text-sm">35%</span>
                       </div>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span>Notes Plan</span>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-16 bg-gray-200 rounded-full h-2">
-                          <div className="bg-purple-600 h-2 rounded-full" style={{width: "25%"}}></div>
+                      <span>Upgrade Rate</span>
+                      <div className="text-right">
+                        <span className="font-bold">12%</span>
+                        <div className="w-20 bg-gray-200 rounded-full h-2 mt-1">
+                          <div className="bg-purple-500 h-2 rounded-full w-[12%]"></div>
                         </div>
-                        <span className="text-sm">25%</span>
                       </div>
                     </div>
                   </div>
@@ -589,109 +1004,236 @@ export default function AdminDashboard() {
             </div>
           </TabsContent>
 
-          {/* Settings Tab */}
-          <TabsContent value="settings" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Settings className="h-5 w-5" />
-                  <span>Platform Configuration</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
+          {/* Security Tab */}
+          <TabsContent value="security" className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Shield className="h-5 w-5" />
+                    <span>Security Settings</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
                   <div className="space-y-4">
-                    <Label>OpenAI API Settings</Label>
-                    <Input placeholder="API Key" type="password" defaultValue="sk-..." />
-                    <Input placeholder="Max tokens per request" defaultValue="2048" />
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="two-factor">Two-Factor Authentication</Label>
+                      <Switch id="two-factor" defaultChecked />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="ip-filtering">IP Address Filtering</Label>
+                      <Switch id="ip-filtering" />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="rate-limiting">Rate Limiting</Label>
+                      <Switch id="rate-limiting" defaultChecked />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="encryption">Data Encryption</Label>
+                      <Switch id="encryption" defaultChecked disabled />
+                    </div>
                   </div>
-                  <div className="space-y-4">
-                    <Label>Job Scraping Settings</Label>
-                    <Input placeholder="Scraping frequency (hours)" defaultValue="6" />
-                    <Select defaultValue="all">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Job categories" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Categories</SelectItem>
-                        <SelectItem value="tech">Technology Only</SelectItem>
-                        <SelectItem value="custom">Custom Filter</SelectItem>
-                      </SelectContent>
-                    </Select>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Lock className="h-5 w-5" />
+                    <span>Access Logs</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="text-sm">
+                      <p className="font-medium">Admin login: admin@applyiq.com</p>
+                      <p className="text-gray-500">2 minutes ago • 192.168.1.1</p>
+                    </div>
+                    <div className="text-sm">
+                      <p className="font-medium">Failed login attempt</p>
+                      <p className="text-gray-500">1 hour ago • 203.45.67.89</p>
+                    </div>
+                    <div className="text-sm">
+                      <p className="font-medium">User registration: jane@example.com</p>
+                      <p className="text-gray-500">3 hours ago • 10.0.0.45</p>
+                    </div>
                   </div>
-                </div>
-                <Button>Save Configuration</Button>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
-          {/* Logs Tab */}
-          <TabsContent value="logs" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
+          {/* Tools Tab */}
+          <TabsContent value="tools" className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
-                    <Activity className="h-5 w-5" />
-                    <span>System Logs</span>
+                    <Archive className="h-5 w-5" />
+                    <span>Backup Management</span>
                   </CardTitle>
-                  <Button variant="outline">
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Refresh
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {logs.map((log) => (
-                    <div key={log.id} className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50">
-                      {getLogIcon(log.type)}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-start">
-                          <p className="text-sm font-medium">{log.message}</p>
-                          <Badge variant="outline" className="text-xs">
-                            {log.component}
-                          </Badge>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-1">{log.timestamp}</p>
-                      </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span>Auto Backup</span>
+                      <Switch defaultChecked />
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    <div className="space-y-2">
+                      {backups.slice(0, 3).map((backup) => (
+                        <div key={backup.id} className="flex justify-between items-center text-sm">
+                          <div>
+                            <span className="font-medium capitalize">{backup.type}</span>
+                            <span className="text-gray-500 ml-2">{backup.size}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-gray-500">{backup.createdAt}</span>
+                            {getStatusBadge(backup.status)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <Button className="w-full" onClick={() => sendSystemAlert("info", "Manual backup started")}>
+                      <Archive className="h-4 w-4 mr-2" />
+                      Create Backup Now
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <CloudDownload className="h-5 w-5" />
+                    <span>Data Export</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button 
+                        variant="outline"
+                        onClick={() => exportUsers("csv")}
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        User Data
+                      </Button>
+                      <Button variant="outline">
+                        <Download className="h-4 w-4 mr-2" />
+                        Analytics
+                      </Button>
+                      <Button variant="outline">
+                        <Download className="h-4 w-4 mr-2" />
+                        System Logs
+                      </Button>
+                      <Button variant="outline">
+                        <Download className="h-4 w-4 mr-2" />
+                        Billing Data
+                      </Button>
+                    </div>
+                    <Alert>
+                      <Lightbulb className="h-4 w-4" />
+                      <AlertDescription>
+                        Data exports are encrypted and include compliance reports for GDPR requirements.
+                      </AlertDescription>
+                    </Alert>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
 
-      {/* User Detail Modal */}
+      {/* Enhanced User Detail Modal */}
       {selectedUser && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <Card className="max-w-2xl w-full">
+          <Card className="max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <CardHeader>
-              <CardTitle>User Details: {selectedUser.name}</CardTitle>
+              <div className="flex justify-between items-start">
+                <div>
+                  <CardTitle className="flex items-center space-x-2">
+                    <User className="h-5 w-5" />
+                    <span>{selectedUser.name}</span>
+                  </CardTitle>
+                  <CardDescription>{selectedUser.email}</CardDescription>
+                </div>
+                {getStatusBadge(selectedUser.status)}
+              </div>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
+            <CardContent className="space-y-6">
+              <div className="grid md:grid-cols-3 gap-6">
                 <div>
-                  <Label>Email</Label>
-                  <p>{selectedUser.email}</p>
+                  <Label>Account Details</Label>
+                  <div className="space-y-2 mt-2">
+                    <div className="flex justify-between">
+                      <span className="text-sm">Plan:</span>
+                      <Badge className="capitalize">{selectedUser.plan}</Badge>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm">Join Date:</span>
+                      <span className="text-sm">{selectedUser.joinDate}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm">Last Active:</span>
+                      <span className="text-sm">{selectedUser.lastActive}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm">Total Spent:</span>
+                      <span className="text-sm font-medium">${selectedUser.totalSpent}</span>
+                    </div>
+                  </div>
                 </div>
+                
                 <div>
-                  <Label>Plan</Label>
-                  <Badge className="capitalize">{selectedUser.plan}</Badge>
+                  <Label>Location & Device</Label>
+                  <div className="space-y-2 mt-2">
+                    <div className="flex justify-between">
+                      <span className="text-sm">Country:</span>
+                      <span className="text-sm">{selectedUser.country}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm">IP Address:</span>
+                      <span className="text-sm">{selectedUser.ipAddress}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm">Device:</span>
+                      <span className="text-sm">{selectedUser.device}</span>
+                    </div>
+                  </div>
                 </div>
+
                 <div>
-                  <Label>Status</Label>
-                  {getStatusBadge(selectedUser.status)}
-                </div>
-                <div>
-                  <Label>Join Date</Label>
-                  <p>{selectedUser.joinDate}</p>
+                  <Label>Usage Limits</Label>
+                  <div className="space-y-2 mt-2">
+                    <div className="text-sm">
+                      <div className="flex justify-between mb-1">
+                        <span>Job Matches:</span>
+                        <span>{selectedUser.usage.jobMatches}/{selectedUser.limits.jobMatches}</span>
+                      </div>
+                      <Progress value={(selectedUser.usage.jobMatches / selectedUser.limits.jobMatches) * 100} className="h-1" />
+                    </div>
+                    <div className="text-sm">
+                      <div className="flex justify-between mb-1">
+                        <span>Cover Letters:</span>
+                        <span>{selectedUser.usage.coverLetters}/{selectedUser.limits.coverLetters}</span>
+                      </div>
+                      <Progress value={(selectedUser.usage.coverLetters / selectedUser.limits.coverLetters) * 100} className="h-1" />
+                    </div>
+                    <div className="text-sm">
+                      <div className="flex justify-between mb-1">
+                        <span>Notes:</span>
+                        <span>{selectedUser.usage.notesGenerated}/{selectedUser.limits.notesGenerated}</span>
+                      </div>
+                      <Progress value={(selectedUser.usage.notesGenerated / selectedUser.limits.notesGenerated) * 100} className="h-1" />
+                    </div>
+                  </div>
                 </div>
               </div>
+
               <div>
                 <Label>Usage Statistics</Label>
-                <div className="grid grid-cols-2 gap-4 mt-2">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
                   <div className="text-center p-3 bg-blue-50 rounded">
                     <p className="text-2xl font-bold">{selectedUser.usage.jobMatches}</p>
                     <p className="text-sm text-gray-600">Job Matches</p>
@@ -705,16 +1247,31 @@ export default function AdminDashboard() {
                     <p className="text-sm text-gray-600">Notes Generated</p>
                   </div>
                   <div className="text-center p-3 bg-orange-50 rounded">
-                    <p className="text-2xl font-bold">{selectedUser.usage.mcqsCreated}</p>
-                    <p className="text-sm text-gray-600">MCQs Created</p>
+                    <p className="text-2xl font-bold">{selectedUser.usage.apiCalls}</p>
+                    <p className="text-sm text-gray-600">API Calls</p>
                   </div>
                 </div>
               </div>
+
               <div className="flex justify-end space-x-2">
                 <Button variant="outline" onClick={() => setSelectedUser(null)}>
                   Close
                 </Button>
-                <Button onClick={() => toggleUserStatus(selectedUser.id)}>
+                <Button variant="outline">
+                  <Mail className="h-4 w-4 mr-2" />
+                  Send Email
+                </Button>
+                <Button variant="outline">
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit User
+                </Button>
+                <Button 
+                  variant={selectedUser.status === "active" ? "destructive" : "default"}
+                  onClick={() => {
+                    toggleUserStatus(selectedUser.id);
+                    setSelectedUser(null);
+                  }}
+                >
                   {selectedUser.status === "active" ? "Suspend User" : "Activate User"}
                 </Button>
               </div>
