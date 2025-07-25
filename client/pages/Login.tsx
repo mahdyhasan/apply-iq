@@ -22,7 +22,12 @@ export default function Login() {
 
     // Simulate authentication with default credentials
     if (email === "user@applyiq.com" && password === "user123") {
-      localStorage.setItem("user", JSON.stringify({ email, role: "user" }));
+      localStorage.setItem("user", JSON.stringify({
+        email,
+        role: "user",
+        plan: "bundle",
+        name: "John Doe"
+      }));
       navigate("/dashboard");
     } else if (email === "admin@applyiq.com" && password === "admin123") {
       localStorage.setItem("user", JSON.stringify({ email, role: "admin" }));
