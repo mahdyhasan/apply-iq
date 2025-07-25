@@ -104,107 +104,21 @@ export default function Admin() {
           </Card>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* User Management */}
-          <Card className="border-2 border-blue-100">
-            <CardHeader>
-              <div className="flex items-center space-x-3">
-                <Users className="h-6 w-6 text-primary" />
-                <div>
-                  <CardTitle>User Management</CardTitle>
-                  <CardDescription>View and manage registered users</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <div className="text-4xl mb-4">🚧</div>
-                <h3 className="text-lg font-semibold mb-2">Coming in Phase 5!</h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  View all users, their plans, usage history, and send system updates.
-                </p>
-                <Button variant="outline" disabled>
-                  Manage Users
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* System Analytics */}
-          <Card className="border-2 border-blue-100">
-            <CardHeader>
-              <div className="flex items-center space-x-3">
-                <BarChart className="h-6 w-6 text-primary" />
-                <div>
-                  <CardTitle>System Analytics</CardTitle>
-                  <CardDescription>Platform usage and performance metrics</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <div className="text-4xl mb-4">📊</div>
-                <h3 className="text-lg font-semibold mb-2">Coming in Phase 5!</h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  Monitor job scraping, AI usage, token consumption, and system logs.
-                </p>
-                <Button variant="outline" disabled>
-                  View Analytics
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Platform Settings */}
-          <Card className="border-2 border-blue-100">
-            <CardHeader>
-              <div className="flex items-center space-x-3">
-                <Settings className="h-6 w-6 text-primary" />
-                <div>
-                  <CardTitle>Platform Settings</CardTitle>
-                  <CardDescription>Configure job boards and AI settings</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <div className="text-4xl mb-4">⚙���</div>
-                <h3 className="text-lg font-semibold mb-2">Coming in Phase 5!</h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  Add/remove job boards, configure news sources, and manage AI prompts.
-                </p>
-                <Button variant="outline" disabled>
-                  Platform Settings
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Database Management */}
-          <Card className="border-2 border-blue-100">
-            <CardHeader>
-              <div className="flex items-center space-x-3">
-                <Database className="h-6 w-6 text-primary" />
-                <div>
-                  <CardTitle>Database Management</CardTitle>
-                  <CardDescription>Monitor system health and data</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <div className="text-4xl mb-4">💾</div>
-                <h3 className="text-lg font-semibold mb-2">Coming in Phase 5!</h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  View system logs, backup data, and monitor platform health.
-                </p>
-                <Button variant="outline" disabled>
-                  Database Tools
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <Card className="border-2 border-green-100">
+          <CardContent className="p-8 text-center">
+            <h2 className="text-2xl font-bold text-green-800 mb-4">🎉 Admin Dashboard is Ready!</h2>
+            <p className="text-gray-600 mb-6">
+              Access the full-featured admin dashboard with user management, analytics,
+              system monitoring, and platform configuration.
+            </p>
+            <Button asChild size="lg" className="text-lg px-8 py-6">
+              <Link to="/admin-dashboard">
+                <Shield className="h-5 w-5 mr-2" />
+                Access Full Admin Dashboard
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
 
         {/* Development Progress */}
         <Card className="mt-8 border-2 border-green-100">
