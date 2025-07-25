@@ -134,7 +134,7 @@ export default function Admin() {
           <Card className="border-2 border-blue-100">
             <CardHeader>
               <div className="flex items-center space-x-3">
-                <BarChart3 className="h-6 w-6 text-primary" />
+                <BarChart className="h-6 w-6 text-primary" />
                 <div>
                   <CardTitle>System Analytics</CardTitle>
                   <CardDescription>Platform usage and performance metrics</CardDescription>
@@ -168,7 +168,7 @@ export default function Admin() {
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
-                <div className="text-4xl mb-4">⚙️</div>
+                <div className="text-4xl mb-4">⚙���</div>
                 <h3 className="text-lg font-semibold mb-2">Coming in Phase 5!</h3>
                 <p className="text-gray-600 text-sm mb-4">
                   Add/remove job boards, configure news sources, and manage AI prompts.
