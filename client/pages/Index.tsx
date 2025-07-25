@@ -137,7 +137,7 @@ export default function Index() {
             <Card className="border-2 border-blue-100 hover:border-primary transition-colors">
               <CardHeader>
                 <div className="flex items-center space-x-3 mb-4">
-                  <PresentationChart className="h-8 w-8 text-primary" />
+                  <Presentation className="h-8 w-8 text-primary" />
                   <CardTitle className="text-2xl">AI Notes & Slide Generator</CardTitle>
                 </div>
                 <CardDescription className="text-lg">
