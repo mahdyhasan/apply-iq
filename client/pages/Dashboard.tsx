@@ -72,17 +72,33 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="text-center py-8">
-                    <div className="text-4xl mb-4">🚧</div>
-                    <h3 className="text-lg font-semibold mb-2">Coming in Phase 3!</h3>
-                    <p className="text-gray-600 text-sm mb-4">
-                      This dashboard will include resume upload, job matching, 
-                      company insights, and cover letter generation.
-                    </p>
-                    <Button variant="outline" disabled>
-                      Access Resume Tools
-                    </Button>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-primary">15</div>
+                      <div className="text-sm text-gray-600">Job Matches</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-green-600">3</div>
+                      <div className="text-sm text-gray-600">Applications</div>
+                    </div>
                   </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Resume uploaded</span>
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Daily job scraping</span>
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Company insights</span>
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                    </div>
+                  </div>
+                  <Button asChild className="w-full">
+                    <Link to="/resume-assistant">Access Resume Tools</Link>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
