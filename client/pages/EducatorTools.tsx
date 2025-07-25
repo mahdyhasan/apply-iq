@@ -510,7 +510,7 @@ Students should practice applying these concepts through homework exercises and 
                       <CardTitle className="flex items-center space-x-2">
                         {selectedContent.type === "notes" && <BookOpen className="h-5 w-5" />}
                         {selectedContent.type === "mcqs" && <HelpCircle className="h-5 w-5" />}
-                        {selectedContent.type === "slides" && <PresentationChart className="h-5 w-5" />}
+                        {selectedContent.type === "slides" && <Presentation className="h-5 w-5" />}
                         <span>{selectedContent.topic} - {selectedContent.type.toUpperCase()}</span>
                       </CardTitle>
                       <CardDescription>
