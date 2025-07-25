@@ -9,12 +9,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  BookOpen, 
-  PresentationChart, 
-  Download, 
-  Save, 
-  Eye, 
+import {
+  BookOpen,
+  Presentation,
+  Download,
+  Save,
+  Eye,
   FileText,
   HelpCircle,
   Lightbulb,
