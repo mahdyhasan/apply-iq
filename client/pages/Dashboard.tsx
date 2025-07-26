@@ -7,12 +7,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  FileText, 
-  LogOut, 
-  User, 
-  Settings, 
-  CheckCircle, 
+import {
+  FileText,
+  LogOut,
+  User,
+  Settings,
+  CheckCircle,
   TrendingUp,
   Calendar,
   Clock,
@@ -48,7 +48,8 @@ import {
   ChevronRight,
   ArrowUp,
   ArrowDown,
-  Percent
+  Percent,
+  Key
 } from "lucide-react";
 
 export default function Dashboard() {
