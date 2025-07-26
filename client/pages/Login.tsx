@@ -30,8 +30,8 @@ export default function Login() {
       }));
       navigate("/dashboard");
     } else if (email === "admin@applyiq.com" && password === "admin123") {
-      localStorage.setItem("user", JSON.stringify({ email, role: "admin" }));
-      navigate("/admin");
+      localStorage.setItem("user", JSON.stringify({ email, role: "admin", name: "Admin User" }));
+      navigate("/admin-dashboard");
     } else {
       setError("Invalid email or password. Try user@applyiq.com/user123 or admin@applyiq.com/admin123");
     }
