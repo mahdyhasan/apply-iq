@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import PackageDashboard from "./pages/PackageDashboard";
+import PackageUpgrade from "./pages/PackageUpgrade";
 import Onboarding from "./pages/Onboarding";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/dashboard" element={<PackageDashboard />} />
+          <Route path="/upgrade" element={<PackageUpgrade />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/demo" element={<NotFound />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

@@ -301,7 +301,11 @@ export default function PackageDashboard() {
                               Upgrade to create more variations!
                             </AlertDescription>
                           </Alert>
-                          <Button variant="outline" className="w-full">
+                          <Button
+                            variant="outline"
+                            className="w-full"
+                            onClick={() => navigate("/upgrade")}
+                          >
                             <ArrowUp className="h-4 w-4 mr-2" />
                             Upgrade Plan
                           </Button>
@@ -342,7 +346,12 @@ export default function PackageDashboard() {
                   <div className="mt-6 p-4 bg-blue-50 rounded-lg">
                     <p className="text-sm text-blue-800">{config?.upgradePrompt || "Upgrade for more features!"}</p>
                     {userPlan !== "premium" && (
-                      <Button variant="outline" size="sm" className="mt-2 w-full">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="mt-2 w-full"
+                        onClick={() => navigate("/upgrade")}
+                      >
                         <ArrowUp className="h-4 w-4 mr-2" />
                         View Upgrade Options
                       </Button>
@@ -553,7 +562,10 @@ export default function PackageDashboard() {
                     <span className="font-medium">{config.price}{config.period}</span>
                   </div>
                   <div className="space-y-2">
-                    <Button className="w-full">
+                    <Button
+                      className="w-full"
+                      onClick={() => navigate("/upgrade")}
+                    >
                       <ArrowUp className="h-4 w-4 mr-2" />
                       Upgrade Plan
                     </Button>
