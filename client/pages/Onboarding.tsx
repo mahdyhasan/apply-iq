@@ -24,7 +24,8 @@ import {
   Zap,
   FileText,
   TrendingUp,
-  DollarSign
+  DollarSign,
+  Globe
 } from "lucide-react";
 
 interface OnboardingData {
