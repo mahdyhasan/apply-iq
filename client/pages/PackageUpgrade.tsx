@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { 
+import {
   ArrowLeft,
   Check,
   Crown,
@@ -28,7 +28,8 @@ import {
   Globe,
   Users,
   TrendingUp,
-  Award
+  Award,
+  FileText
 } from "lucide-react";
 
 interface Package {
