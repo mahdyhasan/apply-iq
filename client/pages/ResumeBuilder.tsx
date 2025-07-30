@@ -10,14 +10,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Upload, 
-  FileText, 
-  Edit3, 
-  Wand2, 
-  Copy, 
-  Eye, 
-  Download, 
+import {
+  Upload,
+  FileText,
+  Edit3,
+  Wand2,
+  Copy,
+  Eye,
+  Download,
   Save,
   Plus,
   Trash2,
@@ -26,7 +26,8 @@ import {
   Target,
   CheckCircle,
   AlertCircle,
-  Sparkles
+  Sparkles,
+  Briefcase
 } from "lucide-react";
 
 interface ResumeData {
