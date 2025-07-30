@@ -289,7 +289,10 @@ export default function PackageDashboard() {
                         Upload existing resume, paste content, or start from scratch
                       </p>
                       {canCreateResume ? (
-                        <Button className="w-full">
+                        <Button
+                          className="w-full"
+                          onClick={() => navigate("/resume-builder")}
+                        >
                           <Plus className="h-4 w-4 mr-2" />
                           Create New Resume
                         </Button>
@@ -369,19 +372,35 @@ export default function PackageDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <Button variant="outline" className="h-16 flex-col space-y-1">
+                  <Button
+                    variant="outline"
+                    className="h-16 flex-col space-y-1"
+                    onClick={() => navigate("/resume-builder")}
+                  >
                     <Upload className="h-5 w-5" />
                     <span className="text-xs">Upload Resume</span>
                   </Button>
-                  <Button variant="outline" className="h-16 flex-col space-y-1">
+                  <Button
+                    variant="outline"
+                    className="h-16 flex-col space-y-1"
+                    onClick={() => navigate("/resume-builder")}
+                  >
                     <Edit3 className="h-5 w-5" />
                     <span className="text-xs">Manual Entry</span>
                   </Button>
-                  <Button variant="outline" className="h-16 flex-col space-y-1">
+                  <Button
+                    variant="outline"
+                    className="h-16 flex-col space-y-1"
+                    onClick={() => navigate("/resume-builder")}
+                  >
                     <FileText className="h-5 w-5" />
                     <span className="text-xs">Templates</span>
                   </Button>
-                  <Button variant="outline" className="h-16 flex-col space-y-1">
+                  <Button
+                    variant="outline"
+                    className="h-16 flex-col space-y-1"
+                    onClick={() => navigate("/resume-builder")}
+                  >
                     <Zap className="h-5 w-5" />
                     <span className="text-xs">AI Optimize</span>
                   </Button>
@@ -395,7 +414,7 @@ export default function PackageDashboard() {
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold">My Resumes</h2>
               {canCreateResume && (
-                <Button>
+                <Button onClick={() => navigate("/resume-builder")}>
                   <Plus className="h-4 w-4 mr-2" />
                   Create New Resume
                 </Button>
