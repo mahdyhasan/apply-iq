@@ -9,20 +9,21 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { 
-  User, 
-  Phone, 
-  Mail, 
-  Building, 
-  Target, 
-  Briefcase, 
-  ChevronRight, 
+import {
+  User,
+  Phone,
+  Mail,
+  Building,
+  Target,
+  Briefcase,
+  ChevronRight,
   ChevronLeft,
   CheckCircle,
   Star,
   Crown,
   Zap,
-  FileText
+  FileText,
+  TrendingUp
 } from "lucide-react";
 
 interface OnboardingData {
