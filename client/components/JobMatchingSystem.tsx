@@ -217,23 +217,23 @@ export default function JobMatchingSystem({ userPlan, onUpgrade }: JobMatchingPr
   useEffect(() => {
     // Apply filters
     let filtered = jobs;
-    
+
     if (searchTerm) {
-      filtered = filtered.filter(job => 
+      filtered = filtered.filter(job =>
         job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.company.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    
-    if (locationFilter) {
+
+    if (locationFilter && locationFilter !== "all") {
       filtered = filtered.filter(job => job.location === locationFilter);
     }
-    
-    if (companyFilter) {
+
+    if (companyFilter && companyFilter !== "all") {
       filtered = filtered.filter(job => job.company === companyFilter);
     }
-    
-    if (salaryFilter) {
+
+    if (salaryFilter && salaryFilter !== "all") {
       // Simple salary filtering logic
       filtered = filtered.filter(job => {
         const salaryNum = parseInt(job.salary.replace(/[^\d]/g, ''));
@@ -241,7 +241,7 @@ export default function JobMatchingSystem({ userPlan, onUpgrade }: JobMatchingPr
         return salaryNum >= filterNum;
       });
     }
-    
+
     setFilteredJobs(filtered);
   }, [searchTerm, locationFilter, companyFilter, salaryFilter, jobs]);
 
@@ -338,7 +338,7 @@ export default function JobMatchingSystem({ userPlan, onUpgrade }: JobMatchingPr
                   <SelectValue placeholder="Location" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Locations</SelectItem>
+                  <SelectItem value="all">All Locations</SelectItem>
                   <SelectItem value="Dhaka">Dhaka</SelectItem>
                   <SelectItem value="Chittagong">Chittagong</SelectItem>
                   <SelectItem value="Sylhet">Sylhet</SelectItem>
@@ -349,7 +349,7 @@ export default function JobMatchingSystem({ userPlan, onUpgrade }: JobMatchingPr
                   <SelectValue placeholder="Company" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Companies</SelectItem>
+                  <SelectItem value="all">All Companies</SelectItem>
                   <SelectItem value="BRAC Bank">BRAC Bank</SelectItem>
                   <SelectItem value="Grameenphone">Grameenphone</SelectItem>
                   <SelectItem value="Pathao">Pathao</SelectItem>
@@ -361,7 +361,7 @@ export default function JobMatchingSystem({ userPlan, onUpgrade }: JobMatchingPr
                   <SelectValue placeholder="Min Salary" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Any Salary</SelectItem>
+                  <SelectItem value="all">Any Salary</SelectItem>
                   <SelectItem value="40000">৳40K+</SelectItem>
                   <SelectItem value="60000">৳60K+</SelectItem>
                   <SelectItem value="80000">৳80K+</SelectItem>
