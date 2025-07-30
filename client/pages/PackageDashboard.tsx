@@ -90,16 +90,32 @@ export default function PackageDashboard() {
   const [user, setUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
   const [resumes, setResumes] = useState<Resume[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (!userData) {
-      navigate("/login");
-      return;
-    }
+    try {
+      const userData = localStorage.getItem("user");
+      if (!userData) {
+        navigate("/login");
+        return;
+      }
 
-    const parsedUser = JSON.parse(userData);
-    setUser(parsedUser);
+      const parsedUser = JSON.parse(userData);
+
+      // Ensure user has required properties
+      if (!parsedUser.email) {
+        console.error("Invalid user data, redirecting to login");
+        navigate("/login");
+        return;
+      }
+
+      // Set default plan if not present
+      if (!parsedUser.plan) {
+        parsedUser.plan = "free";
+        localStorage.setItem("user", JSON.stringify(parsedUser));
+      }
+
+      setUser(parsedUser);
 
     // Load demo resumes based on package
     const demoResumes: Resume[] = [];
@@ -134,6 +150,12 @@ export default function PackageDashboard() {
       );
     }
     setResumes(demoResumes);
+    } catch (error) {
+      console.error("Error loading user data:", error);
+      navigate("/login");
+    } finally {
+      setIsLoading(false);
+    }
   }, [navigate]);
 
   const handleLogout = () => {
@@ -141,9 +163,25 @@ export default function PackageDashboard() {
     navigate("/");
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!user) return null;
 
-  const config = PACKAGE_CONFIG[user.plan];
+  // Ensure user has a valid plan, default to 'free' if not
+  const userPlan = (user.plan && PACKAGE_CONFIG[user.plan as keyof typeof PACKAGE_CONFIG])
+    ? user.plan as keyof typeof PACKAGE_CONFIG
+    : 'free';
+
+  const config = PACKAGE_CONFIG[userPlan];
   const canCreateResume = resumes.length < config.resumeLimit;
   const totalRevisionsUsed = resumes.reduce((sum, resume) => sum + resume.revisionsUsed, 0);
 
@@ -157,7 +195,8 @@ export default function PackageDashboard() {
       { title: "DevOps Engineer", company: "SSL Commerz", match: 79, salary: "৳75k-110k" }
     ];
 
-    if (config.jobMatches === 0) return [];
+    // Safety check for config
+    if (!config || config.jobMatches === 0) return [];
     if (config.jobMatches === -1) return allJobs;
     return allJobs.slice(0, config.jobMatches);
   };
@@ -202,16 +241,16 @@ export default function PackageDashboard() {
                   Welcome back! 👋
                 </h2>
                 <p className="text-gray-600">
-                  You're on the <strong>{config.name}</strong> plan - {config.price}{config.period}
+                  You're on the <strong>{config?.name || "Free"}</strong> plan - {config?.price || "৳0"}{config?.period || ""}
                 </p>
               </div>
               <div className="text-right">
                 <div className="text-sm text-gray-600 mb-2">Usage This Month</div>
                 <div className="space-y-1">
-                  <div className="text-xs">Resumes: {resumes.length}/{config.resumeLimit}</div>
+                  <div className="text-xs">Resumes: {resumes.length}/{config?.resumeLimit || 1}</div>
                   <div className="text-xs">
                     Revisions: {totalRevisionsUsed}/
-                    {user.plan === "premium" ? `${config.revisionLimit} per resume` : config.revisionLimit}
+                    {userPlan === "premium" ? `${config?.revisionLimit || 10} per resume` : config?.revisionLimit || 3}
                   </div>
                 </div>
               </div>
@@ -292,7 +331,7 @@ export default function PackageDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {config.features.map((feature, index) => (
+                    {(config?.features || []).map((feature, index) => (
                       <div key={index} className="flex items-center space-x-2">
                         <Star className="h-4 w-4 text-green-500" />
                         <span className="text-sm">{feature}</span>
@@ -301,8 +340,8 @@ export default function PackageDashboard() {
                   </div>
                   
                   <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-800">{config.upgradePrompt}</p>
-                    {user.plan !== "premium" && (
+                    <p className="text-sm text-blue-800">{config?.upgradePrompt || "Upgrade for more features!"}</p>
+                    {userPlan !== "premium" && (
                       <Button variant="outline" size="sm" className="mt-2 w-full">
                         <ArrowUp className="h-4 w-4 mr-2" />
                         View Upgrade Options
@@ -380,7 +419,7 @@ export default function PackageDashboard() {
                       <div className="space-y-2 text-sm text-gray-600 mb-4">
                         <div>Created: {resume.created}</div>
                         <div>Modified: {resume.lastModified}</div>
-                        <div>Revisions: {resume.revisionsUsed}/{config.revisionLimit}</div>
+                        <div>Revisions: {resume.revisionsUsed}/{config?.revisionLimit || 10}</div>
                       </div>
 
                       <div className="grid grid-cols-3 gap-2">
@@ -425,13 +464,13 @@ export default function PackageDashboard() {
                 <div>
                   <h2 className="text-2xl font-bold">Job Matches</h2>
                   <p className="text-gray-600">
-                    {user.plan === "starter" 
-                      ? `Showing top ${config.jobMatches} matches` 
+                    {userPlan === "starter"
+                      ? `Showing top ${config?.jobMatches || 3} matches`
                       : "All job matches with ratings"
                     }
                   </p>
                 </div>
-                {user.plan === "premium" && (
+                {userPlan === "premium" && (
                   <Button variant="outline">
                     <RefreshCw className="h-4 w-4 mr-2" />
                     Refresh (24h)
@@ -465,7 +504,7 @@ export default function PackageDashboard() {
                 ))}
               </div>
 
-              {user.plan === "starter" && (
+              {userPlan === "starter" && (
                 <Alert>
                   <ArrowUp className="h-4 w-4" />
                   <AlertDescription>
