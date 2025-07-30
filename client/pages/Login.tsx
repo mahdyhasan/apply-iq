@@ -22,18 +22,40 @@ export default function Login() {
 
     // Simulate authentication with default credentials
     if (email === "user@applyiq.com" && password === "user123") {
-      localStorage.setItem("user", JSON.stringify({
+      const userData = {
         email,
         role: "user",
-        plan: "bundle",
-        name: "John Doe"
-      }));
+        plan: "free",
+        name: "John Doe",
+        fullName: "John Doe",
+        phone: "+880 1234567890",
+        onboardingCompleted: true
+      };
+      localStorage.setItem("user", JSON.stringify(userData));
       navigate("/dashboard");
     } else if (email === "admin@applyiq.com" && password === "admin123") {
-      localStorage.setItem("user", JSON.stringify({ email, role: "admin", name: "Admin User" }));
+      localStorage.setItem("user", JSON.stringify({
+        email,
+        role: "admin",
+        name: "Admin User",
+        plan: "enterprise"
+      }));
       navigate("/admin-dashboard");
     } else {
-      setError("Invalid email or password. Try user@applyiq.com/user123 or admin@applyiq.com/admin123");
+      // For demo purposes, create a new user and send to onboarding
+      if (email && password) {
+        const newUser = {
+          email,
+          role: "user",
+          plan: "free",
+          name: email.split('@')[0],
+          onboardingCompleted: false
+        };
+        localStorage.setItem("user", JSON.stringify(newUser));
+        navigate("/onboarding");
+      } else {
+        setError("Please enter email and password. Try user@applyiq.com/user123 for demo.");
+      }
     }
     
     setIsLoading(false);
