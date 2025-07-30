@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -29,17 +35,20 @@ export default function Login() {
         name: "John Doe",
         fullName: "John Doe",
         phone: "+880 1234567890",
-        onboardingCompleted: true
+        onboardingCompleted: true,
       };
       localStorage.setItem("user", JSON.stringify(userData));
       navigate("/dashboard");
     } else if (email === "admin@applyiq.com" && password === "admin123") {
-      localStorage.setItem("user", JSON.stringify({
-        email,
-        role: "admin",
-        name: "Admin User",
-        plan: "enterprise"
-      }));
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          email,
+          role: "admin",
+          name: "Admin User",
+          plan: "enterprise",
+        }),
+      );
       navigate("/admin-dashboard");
     } else {
       // For demo purposes, create a new user and send to onboarding
@@ -48,16 +57,18 @@ export default function Login() {
           email,
           role: "user",
           plan: "free",
-          name: email.split('@')[0],
-          onboardingCompleted: false
+          name: email.split("@")[0],
+          onboardingCompleted: false,
         };
         localStorage.setItem("user", JSON.stringify(newUser));
         navigate("/onboarding");
       } else {
-        setError("Please enter email and password. Try user@applyiq.com/user123 for demo.");
+        setError(
+          "Please enter email and password. Try user@applyiq.com/user123 for demo.",
+        );
       }
     }
-    
+
     setIsLoading(false);
   };
 
@@ -72,7 +83,9 @@ export default function Login() {
 
         <Card className="border-2 border-blue-100">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">
+              Welcome back
+            </CardTitle>
             <CardDescription className="text-center">
               Sign in to your ApplyIQ account
             </CardDescription>
@@ -113,7 +126,11 @@ export default function Login() {
                     className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -129,7 +146,9 @@ export default function Login() {
                   <span className="w-full border-t border-gray-300" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="bg-white px-2 text-gray-500">Demo Credentials</span>
+                  <span className="bg-white px-2 text-gray-500">
+                    Demo Credentials
+                  </span>
                 </div>
               </div>
 
@@ -138,14 +157,18 @@ export default function Login() {
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-medium">User Account (Bundle Plan)</p>
-                      <p className="text-sm text-gray-600">user@applyiq.com / user123</p>
+                      <p className="text-sm text-gray-600">
+                        user@applyiq.com / user123
+                      </p>
                     </div>
                     <Button
                       size="sm"
                       onClick={() => {
                         setEmail("user@applyiq.com");
                         setPassword("user123");
-                        handleLogin({ preventDefault: () => {} } as React.FormEvent);
+                        handleLogin({
+                          preventDefault: () => {},
+                        } as React.FormEvent);
                       }}
                     >
                       Quick Login
@@ -156,7 +179,9 @@ export default function Login() {
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-medium">Admin Account</p>
-                      <p className="text-sm text-gray-600">admin@applyiq.com / admin123</p>
+                      <p className="text-sm text-gray-600">
+                        admin@applyiq.com / admin123
+                      </p>
                     </div>
                     <Button
                       size="sm"
@@ -164,7 +189,9 @@ export default function Login() {
                       onClick={() => {
                         setEmail("admin@applyiq.com");
                         setPassword("admin123");
-                        handleLogin({ preventDefault: () => {} } as React.FormEvent);
+                        handleLogin({
+                          preventDefault: () => {},
+                        } as React.FormEvent);
                       }}
                     >
                       Quick Login
@@ -176,7 +203,10 @@ export default function Login() {
 
             <div className="mt-6 text-center text-sm">
               <span className="text-gray-600">Don't have an account? </span>
-              <Link to="/signup" className="text-primary hover:underline font-medium">
+              <Link
+                to="/signup"
+                className="text-primary hover:underline font-medium"
+              >
                 Sign up
               </Link>
             </div>

@@ -1,12 +1,24 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -29,7 +41,7 @@ import {
   Users,
   TrendingUp,
   Award,
-  FileText
+  FileText,
 } from "lucide-react";
 
 interface Package {
@@ -66,8 +78,12 @@ export default function PackageUpgrade() {
   const navigate = useNavigate();
   const [selectedPackage, setSelectedPackage] = useState<string>("starter");
   const [selectedPayment, setSelectedPayment] = useState<string>("bkash");
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
-  const [currentStep, setCurrentStep] = useState<"packages" | "payment" | "confirmation">("packages");
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
+    "monthly",
+  );
+  const [currentStep, setCurrentStep] = useState<
+    "packages" | "payment" | "confirmation"
+  >("packages");
   const [isProcessing, setIsProcessing] = useState(false);
 
   const packages: Package[] = [
@@ -82,15 +98,15 @@ export default function PackageUpgrade() {
         "3 Total revisions",
         "Basic AI suggestions",
         "PDF download (watermarked)",
-        "Community support"
+        "Community support",
       ],
       limits: {
         resumes: 1,
         revisions: 3,
         jobMatches: 0,
-        aiFeatures: ["Basic optimization"]
+        aiFeatures: ["Basic optimization"],
       },
-      color: "border-gray-300 bg-gray-50"
+      color: "border-gray-300 bg-gray-50",
     },
     {
       id: "starter",
@@ -107,16 +123,16 @@ export default function PackageUpgrade() {
         "PDF + DOCX downloads",
         "Email support",
         "ATS optimization",
-        "Industry templates"
+        "Industry templates",
       ],
       limits: {
         resumes: 1,
         revisions: 10,
         jobMatches: 3,
-        aiFeatures: ["ATS optimization", "Content suggestions"]
+        aiFeatures: ["ATS optimization", "Content suggestions"],
       },
       badge: "Most Popular",
-      color: "border-blue-500 bg-blue-50 ring-2 ring-blue-200"
+      color: "border-blue-500 bg-blue-50 ring-2 ring-blue-200",
     },
     {
       id: "premium",
@@ -134,16 +150,20 @@ export default function PackageUpgrade() {
         "Priority support",
         "Advanced AI features",
         "Cover letter generation",
-        "Interview preparation tips"
+        "Interview preparation tips",
       ],
       limits: {
         resumes: 5,
         revisions: 10,
         jobMatches: -1,
-        aiFeatures: ["Advanced optimization", "JD matching", "Style replication"]
+        aiFeatures: [
+          "Advanced optimization",
+          "JD matching",
+          "Style replication",
+        ],
       },
       badge: "Best Value",
-      color: "border-purple-500 bg-purple-50 ring-2 ring-purple-200"
+      color: "border-purple-500 bg-purple-50 ring-2 ring-purple-200",
     },
     {
       id: "elite",
@@ -160,17 +180,17 @@ export default function PackageUpgrade() {
         "Personal career coach",
         "LinkedIn optimization",
         "Phone support",
-        "Custom templates"
+        "Custom templates",
       ],
       limits: {
         resumes: 5,
         revisions: 15,
         jobMatches: -1,
-        aiFeatures: ["All AI features", "Company analysis", "Career coaching"]
+        aiFeatures: ["All AI features", "Company analysis", "Career coaching"],
       },
       badge: "Coming Soon",
-      color: "border-orange-500 bg-orange-50 ring-2 ring-orange-200"
-    }
+      color: "border-orange-500 bg-orange-50 ring-2 ring-orange-200",
+    },
   ];
 
   const paymentMethods: PaymentMethod[] = [
@@ -181,7 +201,7 @@ export default function PackageUpgrade() {
       description: "Mobile payment - Most convenient for Bangladesh users",
       processingTime: "Instant",
       fees: "No additional fees",
-      popular: true
+      popular: true,
     },
     {
       id: "nagad",
@@ -189,7 +209,7 @@ export default function PackageUpgrade() {
       icon: Smartphone,
       description: "Digital wallet payment",
       processingTime: "Instant",
-      fees: "No additional fees"
+      fees: "No additional fees",
     },
     {
       id: "card",
@@ -197,7 +217,7 @@ export default function PackageUpgrade() {
       icon: CreditCard,
       description: "Visa, MasterCard, or local bank cards",
       processingTime: "Instant",
-      fees: "2.9% processing fee"
+      fees: "2.9% processing fee",
     },
     {
       id: "bank",
@@ -205,12 +225,14 @@ export default function PackageUpgrade() {
       icon: Banknote,
       description: "Direct bank transfer (Manual verification required)",
       processingTime: "1-2 business days",
-      fees: "No additional fees"
-    }
+      fees: "No additional fees",
+    },
   ];
 
-  const selectedPkg = packages.find(pkg => pkg.id === selectedPackage);
-  const selectedPaymentMethod = paymentMethods.find(method => method.id === selectedPayment);
+  const selectedPkg = packages.find((pkg) => pkg.id === selectedPackage);
+  const selectedPaymentMethod = paymentMethods.find(
+    (method) => method.id === selectedPayment,
+  );
 
   const calculateSavings = (pkg: Package) => {
     if (billingCycle === "yearly" && pkg.originalPrice) {
@@ -231,10 +253,10 @@ export default function PackageUpgrade() {
 
   const handleProcessPayment = async () => {
     setIsProcessing(true);
-    
+
     // Simulate payment processing
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
     // Update user's plan in localStorage
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -244,7 +266,7 @@ export default function PackageUpgrade() {
       user.billingCycle = billingCycle;
       localStorage.setItem("user", JSON.stringify(user));
     }
-    
+
     setIsProcessing(false);
     setCurrentStep("confirmation");
   };
@@ -283,7 +305,7 @@ export default function PackageUpgrade() {
         {packages.map((pkg) => {
           const savings = calculateSavings(pkg);
           const isSelected = selectedPackage === pkg.id;
-          
+
           return (
             <Card
               key={pkg.id}
@@ -297,34 +319,47 @@ export default function PackageUpgrade() {
                   {pkg.badge}
                 </Badge>
               )}
-              
+
               {pkg.id === "elite" && (
                 <div className="absolute inset-0 bg-gray-900/10 rounded-lg flex items-center justify-center">
-                  <Badge className="bg-orange-600 text-white">Coming Soon</Badge>
+                  <Badge className="bg-orange-600 text-white">
+                    Coming Soon
+                  </Badge>
                 </div>
               )}
 
               <CardHeader className="text-center">
                 <CardTitle className="flex items-center justify-center space-x-2">
-                  {pkg.id === "free" && <Zap className="h-5 w-5 text-gray-600" />}
-                  {pkg.id === "starter" && <Target className="h-5 w-5 text-blue-600" />}
-                  {pkg.id === "premium" && <Crown className="h-5 w-5 text-purple-600" />}
-                  {pkg.id === "elite" && <Award className="h-5 w-5 text-orange-600" />}
+                  {pkg.id === "free" && (
+                    <Zap className="h-5 w-5 text-gray-600" />
+                  )}
+                  {pkg.id === "starter" && (
+                    <Target className="h-5 w-5 text-blue-600" />
+                  )}
+                  {pkg.id === "premium" && (
+                    <Crown className="h-5 w-5 text-purple-600" />
+                  )}
+                  {pkg.id === "elite" && (
+                    <Award className="h-5 w-5 text-orange-600" />
+                  )}
                   <span>{pkg.name}</span>
                 </CardTitle>
-                
+
                 <div className="space-y-2">
                   <div className="text-3xl font-bold">
                     ৳{pkg.price.toLocaleString()}
-                    <span className="text-sm font-normal text-gray-600">{pkg.period}</span>
+                    <span className="text-sm font-normal text-gray-600">
+                      {pkg.period}
+                    </span>
                   </div>
-                  
+
                   {savings && (
                     <div className="text-sm text-green-600">
-                      Save ৳{savings.amount.toLocaleString()} ({savings.percentage}% off)
+                      Save ৳{savings.amount.toLocaleString()} (
+                      {savings.percentage}% off)
                     </div>
                   )}
-                  
+
                   <CardDescription>{pkg.description}</CardDescription>
                 </div>
               </CardHeader>
@@ -354,11 +389,12 @@ export default function PackageUpgrade() {
         <Alert>
           <Shield className="h-4 w-4" />
           <AlertDescription>
-            <strong>30-day money-back guarantee.</strong> Cancel anytime, no questions asked.
+            <strong>30-day money-back guarantee.</strong> Cancel anytime, no
+            questions asked.
           </AlertDescription>
         </Alert>
 
-        <Button 
+        <Button
           onClick={handleContinueToPayment}
           disabled={!selectedPackage || selectedPackage === "elite"}
           size="lg"
@@ -381,20 +417,29 @@ export default function PackageUpgrade() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="font-semibold">{selectedPkg?.name} Plan</h3>
-              <p className="text-sm text-gray-600">{selectedPkg?.description}</p>
+              <p className="text-sm text-gray-600">
+                {selectedPkg?.description}
+              </p>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold">৳{selectedPkg?.price.toLocaleString()}</div>
+              <div className="text-2xl font-bold">
+                ৳{selectedPkg?.price.toLocaleString()}
+              </div>
               <div className="text-sm text-gray-600">{selectedPkg?.period}</div>
             </div>
           </div>
-          
+
           {billingCycle === "yearly" && selectedPkg?.originalPrice && (
             <div className="bg-green-50 p-3 rounded-lg">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-green-800">Annual discount (20% off)</span>
+                <span className="text-green-800">
+                  Annual discount (20% off)
+                </span>
                 <span className="text-green-800 font-medium">
-                  -৳{(selectedPkg.originalPrice - selectedPkg.price).toLocaleString()}
+                  -৳
+                  {(
+                    selectedPkg.originalPrice - selectedPkg.price
+                  ).toLocaleString()}
                 </span>
               </div>
             </div>
@@ -406,13 +451,21 @@ export default function PackageUpgrade() {
       <Card>
         <CardHeader>
           <CardTitle>Payment Method</CardTitle>
-          <CardDescription>Choose your preferred payment method</CardDescription>
+          <CardDescription>
+            Choose your preferred payment method
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <RadioGroup value={selectedPayment} onValueChange={setSelectedPayment}>
+          <RadioGroup
+            value={selectedPayment}
+            onValueChange={setSelectedPayment}
+          >
             <div className="space-y-3">
               {paymentMethods.map((method) => (
-                <div key={method.id} className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50">
+                <div
+                  key={method.id}
+                  className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50"
+                >
                   <RadioGroupItem value={method.id} id={method.id} />
                   <div className="flex items-center space-x-3 flex-1">
                     <method.icon className="h-6 w-6 text-gray-600" />
@@ -422,10 +475,14 @@ export default function PackageUpgrade() {
                           {method.name}
                         </Label>
                         {method.popular && (
-                          <Badge className="bg-blue-100 text-blue-800">Popular</Badge>
+                          <Badge className="bg-blue-100 text-blue-800">
+                            Popular
+                          </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-gray-600">{method.description}</p>
+                      <p className="text-sm text-gray-600">
+                        {method.description}
+                      </p>
                       <div className="flex items-center space-x-4 text-xs text-gray-500 mt-1">
                         <span>⚡ {method.processingTime}</span>
                         <span>💰 {method.fees}</span>
@@ -478,7 +535,8 @@ export default function PackageUpgrade() {
               <Alert>
                 <Smartphone className="h-4 w-4" />
                 <AlertDescription>
-                  You will be redirected to bKash to complete your payment securely.
+                  You will be redirected to bKash to complete your payment
+                  securely.
                 </AlertDescription>
               </Alert>
               <div>
@@ -495,8 +553,12 @@ export default function PackageUpgrade() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Packages
         </Button>
-        
-        <Button onClick={handleProcessPayment} disabled={isProcessing} size="lg">
+
+        <Button
+          onClick={handleProcessPayment}
+          disabled={isProcessing}
+          size="lg"
+        >
           {isProcessing ? (
             <>
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
@@ -519,8 +581,10 @@ export default function PackageUpgrade() {
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
           <CheckCircle className="h-8 w-8 text-green-600" />
         </div>
-        
-        <h1 className="text-3xl font-bold text-gray-900">Payment Successful! 🎉</h1>
+
+        <h1 className="text-3xl font-bold text-gray-900">
+          Payment Successful! 🎉
+        </h1>
         <p className="text-lg text-gray-600">
           Welcome to {selectedPkg?.name}! Your account has been upgraded.
         </p>
@@ -535,16 +599,27 @@ export default function PackageUpgrade() {
             </div>
             <div className="flex items-center justify-between">
               <span>Amount Paid</span>
-              <span className="font-semibold">৳{selectedPkg?.price.toLocaleString()}</span>
+              <span className="font-semibold">
+                ৳{selectedPkg?.price.toLocaleString()}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span>Payment Method</span>
-              <span className="font-semibold">{selectedPaymentMethod?.name}</span>
+              <span className="font-semibold">
+                {selectedPaymentMethod?.name}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span>Next Billing Date</span>
               <span className="font-semibold">
-                {new Date(Date.now() + (billingCycle === "monthly" ? 30 : 365) * 24 * 60 * 60 * 1000).toLocaleDateString()}
+                {new Date(
+                  Date.now() +
+                    (billingCycle === "monthly" ? 30 : 365) *
+                      24 *
+                      60 *
+                      60 *
+                      1000,
+                ).toLocaleDateString()}
               </span>
             </div>
           </div>
@@ -557,7 +632,9 @@ export default function PackageUpgrade() {
           <div className="p-4 bg-blue-50 rounded-lg">
             <FileText className="h-6 w-6 text-blue-600 mx-auto mb-2" />
             <p className="font-medium">Create Resumes</p>
-            <p className="text-gray-600">Start building your professional resume</p>
+            <p className="text-gray-600">
+              Start building your professional resume
+            </p>
           </div>
           <div className="p-4 bg-green-50 rounded-lg">
             <Target className="h-6 w-6 text-green-600 mx-auto mb-2" />
@@ -591,7 +668,9 @@ export default function PackageUpgrade() {
               </Button>
               <div>
                 <h1 className="text-xl font-bold">Upgrade Your Plan</h1>
-                <p className="text-sm text-gray-600">Choose the perfect plan for your career goals</p>
+                <p className="text-sm text-gray-600">
+                  Choose the perfect plan for your career goals
+                </p>
               </div>
             </div>
           </div>
@@ -602,46 +681,78 @@ export default function PackageUpgrade() {
         {/* Progress Steps */}
         <div className="max-w-3xl mx-auto mb-8">
           <div className="flex items-center justify-center space-x-8">
-            <div className={`flex items-center space-x-2 ${
-              currentStep === "packages" ? "text-blue-600" : 
-              currentStep !== "packages" ? "text-green-600" : "text-gray-400"
-            }`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                currentStep === "packages" ? "bg-blue-600 text-white" :
-                currentStep !== "packages" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-600"
-              }`}>
+            <div
+              className={`flex items-center space-x-2 ${
+                currentStep === "packages"
+                  ? "text-blue-600"
+                  : currentStep !== "packages"
+                    ? "text-green-600"
+                    : "text-gray-400"
+              }`}
+            >
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  currentStep === "packages"
+                    ? "bg-blue-600 text-white"
+                    : currentStep !== "packages"
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-200 text-gray-600"
+                }`}
+              >
                 1
               </div>
               <span className="font-medium">Choose Plan</span>
             </div>
-            
-            <div className={`w-16 h-0.5 ${
-              currentStep !== "packages" ? "bg-green-600" : "bg-gray-200"
-            }`}></div>
-            
-            <div className={`flex items-center space-x-2 ${
-              currentStep === "payment" ? "text-blue-600" : 
-              currentStep === "confirmation" ? "text-green-600" : "text-gray-400"
-            }`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                currentStep === "payment" ? "bg-blue-600 text-white" :
-                currentStep === "confirmation" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-600"
-              }`}>
+
+            <div
+              className={`w-16 h-0.5 ${
+                currentStep !== "packages" ? "bg-green-600" : "bg-gray-200"
+              }`}
+            ></div>
+
+            <div
+              className={`flex items-center space-x-2 ${
+                currentStep === "payment"
+                  ? "text-blue-600"
+                  : currentStep === "confirmation"
+                    ? "text-green-600"
+                    : "text-gray-400"
+              }`}
+            >
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  currentStep === "payment"
+                    ? "bg-blue-600 text-white"
+                    : currentStep === "confirmation"
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-200 text-gray-600"
+                }`}
+              >
                 2
               </div>
               <span className="font-medium">Payment</span>
             </div>
-            
-            <div className={`w-16 h-0.5 ${
-              currentStep === "confirmation" ? "bg-green-600" : "bg-gray-200"
-            }`}></div>
-            
-            <div className={`flex items-center space-x-2 ${
-              currentStep === "confirmation" ? "text-green-600" : "text-gray-400"
-            }`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                currentStep === "confirmation" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-600"
-              }`}>
+
+            <div
+              className={`w-16 h-0.5 ${
+                currentStep === "confirmation" ? "bg-green-600" : "bg-gray-200"
+              }`}
+            ></div>
+
+            <div
+              className={`flex items-center space-x-2 ${
+                currentStep === "confirmation"
+                  ? "text-green-600"
+                  : "text-gray-400"
+              }`}
+            >
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  currentStep === "confirmation"
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-200 text-gray-600"
+                }`}
+              >
                 3
               </div>
               <span className="font-medium">Confirmation</span>
