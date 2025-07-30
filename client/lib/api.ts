@@ -1,4 +1,4 @@
-// API client for Python FastAPI backend
+// API client for Python FastAPI backend (demo mode when backend unavailable)
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 interface LoginCredentials {
