@@ -23,7 +23,8 @@ import {
   Crown,
   Zap,
   FileText,
-  TrendingUp
+  TrendingUp,
+  DollarSign
 } from "lucide-react";
 
 interface OnboardingData {
