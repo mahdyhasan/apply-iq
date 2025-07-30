@@ -6,11 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { 
-  FileText, 
-  LogOut, 
-  User, 
-  Settings, 
+import {
+  FileText,
+  LogOut,
+  User,
+  Settings,
   Upload,
   Download,
   Eye,
@@ -25,6 +25,7 @@ import {
   Plus,
   Trash2
 } from "lucide-react";
+import JobMatchingSystem from "@/components/JobMatchingSystem";
 
 // Package configuration
 const PACKAGE_CONFIG = {
@@ -263,7 +264,7 @@ export default function PackageDashboard() {
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="resumes">My Resumes</TabsTrigger>
-            {jobMatches.length > 0 && <TabsTrigger value="jobs">Job Matches</TabsTrigger>}
+            <TabsTrigger value="jobs">Job Matches</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
 
@@ -467,62 +468,12 @@ export default function PackageDashboard() {
           </TabsContent>
 
           {/* Jobs Tab */}
-          {jobMatches.length > 0 && (
-            <TabsContent value="jobs" className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold">Job Matches</h2>
-                  <p className="text-gray-600">
-                    {userPlan === "starter"
-                      ? `Showing top ${config?.jobMatches || 3} matches`
-                      : "All job matches with ratings"
-                    }
-                  </p>
-                </div>
-                {userPlan === "premium" && (
-                  <Button variant="outline">
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Refresh (24h)
-                  </Button>
-                )}
-              </div>
-
-              <div className="space-y-4">
-                {jobMatches.map((job, index) => (
-                  <Card key={index} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-3 mb-2">
-                            <h3 className="text-lg font-semibold">{job.title}</h3>
-                            <Badge className="bg-green-100 text-green-800">
-                              {job.match}% Match
-                            </Badge>
-                          </div>
-                          <div className="text-gray-600 mb-2">
-                            <span className="font-medium">{job.company}</span> • {job.salary}
-                          </div>
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4 mr-2" />
-                            View Job Details
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              {userPlan === "starter" && (
-                <Alert>
-                  <ArrowUp className="h-4 w-4" />
-                  <AlertDescription>
-                    Upgrade to Premium to see all job matches with unlimited refresh!
-                  </AlertDescription>
-                </Alert>
-              )}
-            </TabsContent>
-          )}
+          <TabsContent value="jobs" className="space-y-6">
+            <JobMatchingSystem
+              userPlan={userPlan}
+              onUpgrade={() => navigate("/upgrade")}
+            />
+          </TabsContent>
 
           {/* Settings Tab */}
           <TabsContent value="settings" className="space-y-6">
