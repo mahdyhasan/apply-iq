@@ -37,6 +37,7 @@ const App = () => (
             <Route path="/upgrade" element={<PackageUpgrade />} />
             <Route path="/resume-builder" element={<ResumeBuilder />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/supabase-test" element={<SupabaseTest />} />
             <Route path="/demo" element={<NotFound />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
