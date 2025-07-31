@@ -45,17 +45,22 @@ export default function Login() {
           navigate("/onboarding");
         }
       }, 1000);
-
     } catch (error: any) {
       console.error("Login error:", error);
 
       // Handle specific error messages
       if (error.message?.includes("Invalid login credentials")) {
-        setError("Invalid email or password. Please check your credentials or sign up.");
+        setError(
+          "Invalid email or password. Please check your credentials or sign up.",
+        );
       } else if (error.message?.includes("Email not confirmed")) {
-        setError("Please check your email and click the confirmation link before signing in.");
+        setError(
+          "Please check your email and click the confirmation link before signing in.",
+        );
       } else {
-        setError(error.message || "An error occurred during login. Please try again.");
+        setError(
+          error.message || "An error occurred during login. Please try again.",
+        );
       }
     } finally {
       setIsLoading(false);

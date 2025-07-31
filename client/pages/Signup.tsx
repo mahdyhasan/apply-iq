@@ -1,25 +1,37 @@
 import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { BrainCircuit, Eye, EyeOff, CheckCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Signup() {
   const [searchParams] = useSearchParams();
   const selectedPlan = searchParams.get("plan") || "free";
-  
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    plan: selectedPlan
+    plan: selectedPlan,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -32,7 +44,7 @@ export default function Signup() {
     free: { name: "Free Plan", price: "Free" },
     starter: { name: "Starter", price: "৳200/month" },
     premium: { name: "Premium", price: "৳500/month" },
-    elite: { name: "Elite", price: "৳1000/month" }
+    elite: { name: "Elite", price: "৳1000/month" },
   };
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -41,7 +53,12 @@ export default function Signup() {
     setError("");
 
     // Validation
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password
+    ) {
       setError("Please fill in all fields");
       setIsLoading(false);
       return;
@@ -62,24 +79,31 @@ export default function Signup() {
     try {
       const userData = {
         full_name: `${formData.firstName} ${formData.lastName}`,
-        plan: formData.plan
+        plan: formData.plan,
       };
 
       await signUp(formData.email, formData.password, userData);
 
       // Show success message and redirect to onboarding
-      alert("Account created successfully! Please check your email for verification, then proceed to onboarding.");
+      alert(
+        "Account created successfully! Please check your email for verification, then proceed to onboarding.",
+      );
       navigate("/onboarding");
-
     } catch (error: any) {
       console.error("Signup error:", error);
 
       if (error.message?.includes("User already registered")) {
-        setError("An account with this email already exists. Please sign in instead.");
-      } else if (error.message?.includes("Password should be at least 6 characters")) {
+        setError(
+          "An account with this email already exists. Please sign in instead.",
+        );
+      } else if (
+        error.message?.includes("Password should be at least 6 characters")
+      ) {
         setError("Password must be at least 6 characters long.");
       } else {
-        setError(error.message || "An error occurred during signup. Please try again.");
+        setError(
+          error.message || "An error occurred during signup. Please try again.",
+        );
       }
     } finally {
       setIsLoading(false);
@@ -87,7 +111,7 @@ export default function Signup() {
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -101,7 +125,9 @@ export default function Signup() {
 
         <Card className="border-2 border-blue-100">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Create your account</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">
+              Create your account
+            </CardTitle>
             <CardDescription className="text-center">
               Start your AI-powered journey today
             </CardDescription>
@@ -118,7 +144,12 @@ export default function Signup() {
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <div className="flex items-center space-x-2 text-sm text-blue-800">
                   <CheckCircle className="h-4 w-4" />
-                  <span>Selected Plan: <strong>{plans[formData.plan as keyof typeof plans]?.name}</strong></span>
+                  <span>
+                    Selected Plan:{" "}
+                    <strong>
+                      {plans[formData.plan as keyof typeof plans]?.name}
+                    </strong>
+                  </span>
                 </div>
                 <p className="text-sm text-blue-600 mt-1">
                   {plans[formData.plan as keyof typeof plans]?.price}
@@ -132,7 +163,9 @@ export default function Signup() {
                     id="firstName"
                     placeholder="John"
                     value={formData.firstName}
-                    onChange={(e) => handleInputChange("firstName", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("firstName", e.target.value)
+                    }
                     required
                   />
                 </div>
@@ -142,7 +175,9 @@ export default function Signup() {
                     id="lastName"
                     placeholder="Doe"
                     value={formData.lastName}
-                    onChange={(e) => handleInputChange("lastName", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("lastName", e.target.value)
+                    }
                     required
                   />
                 </div>
@@ -162,14 +197,23 @@ export default function Signup() {
 
               <div className="space-y-2">
                 <Label htmlFor="plan">Plan</Label>
-                <Select value={formData.plan} onValueChange={(value) => handleInputChange("plan", value)}>
+                <Select
+                  value={formData.plan}
+                  onValueChange={(value) => handleInputChange("plan", value)}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="resume">Resume Assistant - $9/month</SelectItem>
-                    <SelectItem value="notes">Notes Generator - $12/month</SelectItem>
-                    <SelectItem value="bundle">Complete Bundle - $15/month</SelectItem>
+                    <SelectItem value="resume">
+                      Resume Assistant - $9/month
+                    </SelectItem>
+                    <SelectItem value="notes">
+                      Notes Generator - $12/month
+                    </SelectItem>
+                    <SelectItem value="bundle">
+                      Complete Bundle - $15/month
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -182,7 +226,9 @@ export default function Signup() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Create a password"
                     value={formData.password}
-                    onChange={(e) => handleInputChange("password", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("password", e.target.value)
+                    }
                     required
                   />
                   <button
@@ -190,7 +236,11 @@ export default function Signup() {
                     className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -203,7 +253,9 @@ export default function Signup() {
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm your password"
                     value={formData.confirmPassword}
-                    onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("confirmPassword", e.target.value)
+                    }
                     required
                   />
                   <button
@@ -211,7 +263,11 @@ export default function Signup() {
                     className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
-                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -223,7 +279,10 @@ export default function Signup() {
 
             <div className="mt-6 text-center text-sm">
               <span className="text-gray-600">Already have an account? </span>
-              <Link to="/login" className="text-primary hover:underline font-medium">
+              <Link
+                to="/login"
+                className="text-primary hover:underline font-medium"
+              >
                 Sign in
               </Link>
             </div>

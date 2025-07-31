@@ -169,27 +169,38 @@ export default function ResumeBuilder() {
     },
   ];
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     // Validate file type
-    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
     const fileExtension = file.name.toLowerCase();
 
-    if (!allowedTypes.includes(file.type) && !fileExtension.endsWith('.pdf') && !fileExtension.endsWith('.doc') && !fileExtension.endsWith('.docx')) {
-      alert('Please upload a PDF, DOC, or DOCX file.');
+    if (
+      !allowedTypes.includes(file.type) &&
+      !fileExtension.endsWith(".pdf") &&
+      !fileExtension.endsWith(".doc") &&
+      !fileExtension.endsWith(".docx")
+    ) {
+      alert("Please upload a PDF, DOC, or DOCX file.");
       return;
     }
 
     // Validate file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
-      alert('File size must be less than 10MB.');
+      alert("File size must be less than 10MB.");
       return;
     }
 
     setUploadedFile(file);
-    setExtractedText('Processing file...');
+    setExtractedText("Processing file...");
 
     try {
       // For now, we'll extract basic file info and provide a template
@@ -229,30 +240,42 @@ Please edit the content above with your actual resume information.`;
 
       // Set a base ATS score
       setAtsScore(65);
-
     } catch (error) {
-      console.error('Error processing file:', error);
-      setExtractedText('Error processing file. Please try uploading again or use the manual entry option.');
+      console.error("Error processing file:", error);
+      setExtractedText(
+        "Error processing file. Please try uploading again or use the manual entry option.",
+      );
       setAtsScore(45);
     }
   };
 
-  const handleReferenceFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleReferenceFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     // Validate file type
-    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
     const fileExtension = file.name.toLowerCase();
 
-    if (!allowedTypes.includes(file.type) && !fileExtension.endsWith('.pdf') && !fileExtension.endsWith('.doc') && !fileExtension.endsWith('.docx')) {
-      alert('Please upload a PDF, DOC, or DOCX file.');
+    if (
+      !allowedTypes.includes(file.type) &&
+      !fileExtension.endsWith(".pdf") &&
+      !fileExtension.endsWith(".doc") &&
+      !fileExtension.endsWith(".docx")
+    ) {
+      alert("Please upload a PDF, DOC, or DOCX file.");
       return;
     }
 
     // Validate file size (10MB limit)
     if (file.size > 10 * 1024 * 1024) {
-      alert('File size must be less than 10MB.');
+      alert("File size must be less than 10MB.");
       return;
     }
 
@@ -264,7 +287,9 @@ Please edit the content above with your actual resume information.`;
 
     // We can append to existing content or suggest they fill in their details
     if (!referenceResume.trim()) {
-      setReferenceResume(`Reference file uploaded: ${file.name}\n\nPlease add your content below:\n\n[Your Experience]\n[Your Education]\n[Your Skills]\n\nThe AI will format this content using the style from your reference file.`);
+      setReferenceResume(
+        `Reference file uploaded: ${file.name}\n\nPlease add your content below:\n\n[Your Experience]\n[Your Education]\n[Your Skills]\n\nThe AI will format this content using the style from your reference file.`,
+      );
     }
   };
 
@@ -980,8 +1005,7 @@ Please edit the content above with your actual resume information.`;
                         <p className="text-sm text-gray-600 mb-2">
                           {referenceFile
                             ? `Uploaded: ${referenceFile.name}`
-                            : "Upload a resume you like the style of"
-                          }
+                            : "Upload a resume you like the style of"}
                         </p>
                         <Button variant="outline" size="sm">
                           <Upload className="h-4 w-4 mr-2" />
