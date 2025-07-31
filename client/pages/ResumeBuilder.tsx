@@ -83,6 +83,7 @@ interface ResumeData {
 export default function ResumeBuilder() {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const referenceFileInputRef = useRef<HTMLInputElement>(null);
   const [activeMethod, setActiveMethod] = useState<
     "upload" | "manual" | "template" | "ai" | "jd"
   >("upload");
