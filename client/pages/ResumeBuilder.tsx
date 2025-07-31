@@ -972,16 +972,29 @@ Please edit the content above with your actual resume information.`;
                   <CardContent className="space-y-6">
                     <div>
                       <Label>Upload Reference Resume</Label>
-                      <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                      <div
+                        className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-purple-500 transition-colors cursor-pointer"
+                        onClick={() => referenceFileInputRef.current?.click()}
+                      >
                         <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
                         <p className="text-sm text-gray-600 mb-2">
-                          Upload a resume you like the style of
+                          {referenceFile
+                            ? `Uploaded: ${referenceFile.name}`
+                            : "Upload a resume you like the style of"
+                          }
                         </p>
                         <Button variant="outline" size="sm">
                           <Upload className="h-4 w-4 mr-2" />
                           Choose Reference File
                         </Button>
                       </div>
+                      <input
+                        ref={referenceFileInputRef}
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        onChange={handleReferenceFileUpload}
+                        className="hidden"
+                      />
                     </div>
 
                     <div>
