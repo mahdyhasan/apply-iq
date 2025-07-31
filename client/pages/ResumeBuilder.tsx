@@ -91,6 +91,7 @@ export default function ResumeBuilder() {
   const [extractedText, setExtractedText] = useState("");
   const [jobDescription, setJobDescription] = useState("");
   const [referenceResume, setReferenceResume] = useState("");
+  const [referenceFile, setReferenceFile] = useState<File | null>(null);
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [atsScore, setAtsScore] = useState(75);
 
