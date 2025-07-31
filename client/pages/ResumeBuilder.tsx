@@ -237,6 +237,37 @@ Please edit the content above with your actual resume information.`;
     }
   };
 
+  const handleReferenceFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const fileExtension = file.name.toLowerCase();
+
+    if (!allowedTypes.includes(file.type) && !fileExtension.endsWith('.pdf') && !fileExtension.endsWith('.doc') && !fileExtension.endsWith('.docx')) {
+      alert('Please upload a PDF, DOC, or DOCX file.');
+      return;
+    }
+
+    // Validate file size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File size must be less than 10MB.');
+      return;
+    }
+
+    setReferenceFile(file);
+
+    // For the reference upload, we'll just acknowledge the file upload
+    // and suggest manual entry for better results
+    const message = `Reference file "${file.name}" uploaded successfully.\n\nFor best results with AI styling, please add your own content in the text area below. The AI will use the uploaded file as a style reference.`;
+
+    // We can append to existing content or suggest they fill in their details
+    if (!referenceResume.trim()) {
+      setReferenceResume(`Reference file uploaded: ${file.name}\n\nPlease add your content below:\n\n[Your Experience]\n[Your Education]\n[Your Skills]\n\nThe AI will format this content using the style from your reference file.`);
+    }
+  };
+
   const handleAIOptimization = () => {
     // Simulate AI optimization
     setAtsScore((prev) => Math.min(prev + 15, 95));
