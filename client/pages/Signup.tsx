@@ -29,9 +29,10 @@ export default function Signup() {
   const { signUp } = useAuth();
 
   const plans = {
-    resume: { name: "Resume Assistant", price: "$9/month" },
-    notes: { name: "Notes Generator", price: "$12/month" },
-    bundle: { name: "Complete Bundle", price: "$15/month" }
+    free: { name: "Free Plan", price: "Free" },
+    starter: { name: "Starter", price: "৳200/month" },
+    premium: { name: "Premium", price: "৳500/month" },
+    elite: { name: "Elite", price: "৳1000/month" }
   };
 
   const handleSignup = async (e: React.FormEvent) => {
