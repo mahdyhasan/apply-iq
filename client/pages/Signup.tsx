@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BrainCircuit, Eye, EyeOff, CheckCircle } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Signup() {
   const [searchParams] = useSearchParams();
