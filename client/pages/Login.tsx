@@ -25,53 +25,41 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+
     setIsLoading(true);
     setError("");
 
-    // Simulate authentication with default credentials
-    if (email === "user@applyiq.com" && password === "user123") {
-      const userData = {
-        email,
-        role: "user",
-        plan: "free",
-        name: "John Doe",
-        fullName: "John Doe",
-        phone: "+880 1234567890",
-        onboardingCompleted: true,
-      };
-      localStorage.setItem("user", JSON.stringify(userData));
-      navigate("/dashboard");
-    } else if (email === "admin@applyiq.com" && password === "admin123") {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          email,
-          role: "admin",
-          name: "Admin User",
-          plan: "enterprise",
-        }),
-      );
-      navigate("/admin-dashboard");
-    } else {
-      // For demo purposes, create a new user and send to onboarding
-      if (email && password) {
-        const newUser = {
-          email,
-          role: "user",
-          plan: "free",
-          name: email.split("@")[0],
-          onboardingCompleted: false,
-        };
-        localStorage.setItem("user", JSON.stringify(newUser));
-        navigate("/onboarding");
-      } else {
-        setError(
-          "Please enter email and password. Try user@applyiq.com/user123 for demo.",
-        );
-      }
-    }
+    try {
+      await signIn(email, password);
 
-    setIsLoading(false);
+      // Small delay to allow auth context to update
+      setTimeout(() => {
+        if (profile?.onboarding_completed) {
+          navigate("/dashboard");
+        } else {
+          navigate("/onboarding");
+        }
+      }, 1000);
+
+    } catch (error: any) {
+      console.error("Login error:", error);
+
+      // Handle specific error messages
+      if (error.message?.includes("Invalid login credentials")) {
+        setError("Invalid email or password. Please check your credentials or sign up.");
+      } else if (error.message?.includes("Email not confirmed")) {
+        setError("Please check your email and click the confirmation link before signing in.");
+      } else {
+        setError(error.message || "An error occurred during login. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
