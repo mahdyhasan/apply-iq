@@ -16,6 +16,7 @@ import PackageUpgrade from "./pages/PackageUpgrade";
 import ResumeBuilder from "./pages/ResumeBuilder";
 import Onboarding from "./pages/Onboarding";
 import AdminDashboard from "./pages/AdminDashboard";
+import SupabaseTest from "./pages/SupabaseTest";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
