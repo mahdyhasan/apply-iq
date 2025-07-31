@@ -39,6 +39,13 @@ export default function Signup() {
     setIsLoading(true);
     setError("");
 
+    // Validation
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+      setError("Please fill in all fields");
+      setIsLoading(false);
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       setIsLoading(false);
@@ -51,16 +58,31 @@ export default function Signup() {
       return;
     }
 
-    // Simulate successful signup
-    localStorage.setItem("user", JSON.stringify({ 
-      email: formData.email, 
-      role: "user",
-      plan: formData.plan,
-      name: `${formData.firstName} ${formData.lastName}`
-    }));
-    navigate("/dashboard");
-    
-    setIsLoading(false);
+    try {
+      const userData = {
+        full_name: `${formData.firstName} ${formData.lastName}`,
+        plan: formData.plan
+      };
+
+      await signUp(formData.email, formData.password, userData);
+
+      // Show success message and redirect to onboarding
+      alert("Account created successfully! Please check your email for verification, then proceed to onboarding.");
+      navigate("/onboarding");
+
+    } catch (error: any) {
+      console.error("Signup error:", error);
+
+      if (error.message?.includes("User already registered")) {
+        setError("An account with this email already exists. Please sign in instead.");
+      } else if (error.message?.includes("Password should be at least 6 characters")) {
+        setError("Password must be at least 6 characters long.");
+      } else {
+        setError(error.message || "An error occurred during signup. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
