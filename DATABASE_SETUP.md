@@ -25,6 +25,7 @@ Once your project is created, go to **Settings > API** and copy:
 ### 3. Configure Environment Variables
 
 1. Copy `.env.example` to `.env`:
+
    ```bash
    cp .env.example .env
    ```
@@ -56,6 +57,7 @@ Once your project is created, go to **Settings > API** and copy:
 ### 7. Set Up Row Level Security
 
 The schema automatically enables RLS policies that ensure:
+
 - Users can only access their own data
 - Packages are publicly readable
 - Secure authentication flow
@@ -63,6 +65,7 @@ The schema automatically enables RLS policies that ensure:
 ## 📊 Database Schema Overview
 
 ### Core Tables:
+
 - **users** - User profiles and basic info
 - **user_profiles** - Onboarding and profile data
 - **packages** - Subscription plan configurations
@@ -74,6 +77,7 @@ The schema automatically enables RLS policies that ensure:
 - **payment_transactions** - Payment history
 
 ### Key Features:
+
 - ✅ Row Level Security enabled
 - ✅ Automatic user initialization on signup
 - ✅ Usage tracking and limits
@@ -83,6 +87,7 @@ The schema automatically enables RLS policies that ensure:
 ## 🧪 Testing the Setup
 
 1. Start the development server:
+
    ```bash
    npm run dev
    ```
@@ -97,6 +102,7 @@ The schema automatically enables RLS policies that ensure:
 ### Common Issues:
 
 **Environment Variables Not Loading:**
+
 ```bash
 # Make sure .env is in the project root
 # Restart the dev server after changes
@@ -104,16 +110,19 @@ npm run dev
 ```
 
 **Database Connection Failed:**
+
 - Check your Supabase URL and keys
 - Ensure your project is not paused
 - Verify the region settings
 
 **Authentication Issues:**
+
 - Check Site URL in Supabase Auth settings
 - Verify email confirmation settings
 - Check browser console for errors
 
 **RLS Policy Errors:**
+
 - Ensure all SQL from schema.sql was executed
 - Check user authentication status
 - Verify policy configurations in Supabase dashboard
@@ -139,6 +148,7 @@ Before deploying:
 ## 🎯 Next Steps
 
 After setup:
+
 1. Test all user flows
 2. Configure payment integration
 3. Set up job API connections
@@ -148,6 +158,7 @@ After setup:
 ## 📞 Support
 
 If you encounter issues:
+
 1. Check Supabase docs: [supabase.com/docs](https://supabase.com/docs)
 2. Review console errors in browser dev tools
 3. Check Supabase dashboard logs

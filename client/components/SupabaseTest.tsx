@@ -1,66 +1,69 @@
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { supabase } from '@/lib/supabase'
-import { CheckCircle, XCircle, Database, Loader2 } from 'lucide-react'
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/lib/supabase";
+import { CheckCircle, XCircle, Database, Loader2 } from "lucide-react";
 
 interface ConnectionStatus {
-  connected: boolean
-  packages: any[]
-  error?: string
-  userCount?: number
+  connected: boolean;
+  packages: any[];
+  error?: string;
+  userCount?: number;
 }
 
 export default function SupabaseTest() {
-  const [status, setStatus] = useState<ConnectionStatus>({ connected: false, packages: [] })
-  const [loading, setLoading] = useState(true)
-  const [testing, setTesting] = useState(false)
+  const [status, setStatus] = useState<ConnectionStatus>({
+    connected: false,
+    packages: [],
+  });
+  const [loading, setLoading] = useState(true);
+  const [testing, setTesting] = useState(false);
 
   const testConnection = async () => {
-    setLoading(true)
-    setTesting(true)
-    
+    setLoading(true);
+    setTesting(true);
+
     try {
       // Test packages table
       const { data: packages, error: packagesError } = await supabase
-        .from('packages')
-        .select('*')
-        .order('price_bdt')
+        .from("packages")
+        .select("*")
+        .order("price_bdt");
 
       // Test user count (auth.users is protected, so we'll check our users table)
       const { count: userCount, error: userError } = await supabase
-        .from('users')
-        .select('*', { count: 'exact', head: true })
+        .from("users")
+        .select("*", { count: "exact", head: true });
 
       if (packagesError) {
         setStatus({
           connected: false,
           packages: [],
-          error: packagesError.message
-        })
+          error: packagesError.message,
+        });
       } else {
         setStatus({
           connected: true,
           packages: packages || [],
-          userCount: userCount || 0
-        })
+          userCount: userCount || 0,
+        });
       }
     } catch (error: any) {
       setStatus({
         connected: false,
         packages: [],
-        error: error.message
-      })
+        error: error.message,
+      });
     }
-    
-    setLoading(false)
-    setTesting(false)
-  }
+
+    setLoading(false);
+    setTesting(false);
+  };
 
   useEffect(() => {
-    testConnection()
-  }, [])
+    testConnection();
+  }, []);
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
@@ -85,7 +88,9 @@ export default function SupabaseTest() {
 
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Project URL:</span>
-          <span className="text-sm text-gray-600">qzalbwldhvcgrceixfeq.supabase.co</span>
+          <span className="text-sm text-gray-600">
+            qzalbwldhvcgrceixfeq.supabase.co
+          </span>
         </div>
 
         {status.error && (
@@ -112,7 +117,7 @@ export default function SupabaseTest() {
                   <div key={pkg.id} className="p-2 bg-gray-50 rounded-md">
                     <div className="text-sm font-medium">{pkg.name}</div>
                     <div className="text-xs text-gray-600">
-                      {pkg.price_bdt ? `৳${pkg.price_bdt}` : 'Free'}
+                      {pkg.price_bdt ? `৳${pkg.price_bdt}` : "Free"}
                     </div>
                   </div>
                 ))}
@@ -126,11 +131,7 @@ export default function SupabaseTest() {
           </div>
         )}
 
-        <Button 
-          onClick={testConnection} 
-          disabled={testing}
-          className="w-full"
-        >
+        <Button onClick={testConnection} disabled={testing} className="w-full">
           {testing ? (
             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
           ) : (
@@ -151,5 +152,5 @@ export default function SupabaseTest() {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

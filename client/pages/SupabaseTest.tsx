@@ -1,4 +1,4 @@
-import SupabaseTest from '@/components/SupabaseTest'
+import SupabaseTest from "@/components/SupabaseTest";
 
 export default function SupabaseTestPage() {
   return (
@@ -12,12 +12,12 @@ export default function SupabaseTestPage() {
             Testing connection to ApplyIQ Bangladesh database
           </p>
         </div>
-        
+
         <SupabaseTest />
-        
+
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500">
-            If the test fails, follow the setup instructions in{' '}
+            If the test fails, follow the setup instructions in{" "}
             <code className="bg-gray-100 px-1 py-0.5 rounded text-xs">
               SUPABASE_SETUP_INSTRUCTIONS.md
             </code>
@@ -25,5 +25,5 @@ export default function SupabaseTestPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
