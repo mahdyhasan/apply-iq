@@ -167,41 +167,71 @@ export default function ResumeBuilder() {
     },
   ];
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      setUploadedFile(file);
-      // Simulate AI text extraction
-      setTimeout(() => {
-        setExtractedText(`
-JOHN DOE
-Software Engineer
-Email: john.doe@email.com | Phone: +880 1234567890
-LinkedIn: linkedin.com/in/johndoe
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    const fileExtension = file.name.toLowerCase();
+
+    if (!allowedTypes.includes(file.type) && !fileExtension.endsWith('.pdf') && !fileExtension.endsWith('.doc') && !fileExtension.endsWith('.docx')) {
+      alert('Please upload a PDF, DOC, or DOCX file.');
+      return;
+    }
+
+    // Validate file size (10MB limit)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File size must be less than 10MB.');
+      return;
+    }
+
+    setUploadedFile(file);
+    setExtractedText('Processing file...');
+
+    try {
+      // For now, we'll extract basic file info and provide a template
+      // In a real app, you'd use libraries like PDF.js or mammoth.js for proper text extraction
+
+      const fileInfo = `File uploaded: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)
+
+Please review and edit the extracted content below. For better text extraction, consider using the manual entry option.
+
+--- EXTRACTED CONTENT ---
+
+[Your Name]
+[Your Title/Position]
+Email: [your.email@example.com] | Phone: [+880 XXX XXX XXXX]
+LinkedIn: [linkedin.com/in/yourprofile] | Location: [Dhaka, Bangladesh]
 
 PROFESSIONAL SUMMARY
-Experienced software engineer with 5+ years in web development...
+[Brief summary of your experience and skills...]
 
 EXPERIENCE
-Senior Software Engineer | BRAC Bank | 2022-Present
-- Developed and maintained banking applications
-- Led a team of 3 developers
-- Improved system performance by 40%
-
-Software Developer | Grameenphone | 2020-2022
-- Built customer-facing applications
-- Implemented REST APIs
-- Collaborated with cross-functional teams
+[Job Title] | [Company Name] | [Start Date - End Date]
+- [Achievement or responsibility]
+- [Achievement or responsibility]
+- [Achievement or responsibility]
 
 EDUCATION
-Bachelor of Science in Computer Science
-Bangladesh University of Engineering and Technology (BUET) | 2020
+[Degree] | [University/Institution] | [Year]
 
 SKILLS
-JavaScript, React, Node.js, Python, MongoDB, AWS
-        `);
-        setAtsScore(78);
-      }, 2000);
+[List your key skills separated by commas]
+
+--- END OF TEMPLATE ---
+
+Please edit the content above with your actual resume information.`;
+
+      setExtractedText(fileInfo);
+
+      // Set a base ATS score
+      setAtsScore(65);
+
+    } catch (error) {
+      console.error('Error processing file:', error);
+      setExtractedText('Error processing file. Please try uploading again or use the manual entry option.');
+      setAtsScore(45);
     }
   };
 
