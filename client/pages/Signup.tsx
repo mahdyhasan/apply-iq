@@ -11,7 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function Signup() {
   const [searchParams] = useSearchParams();
-  const selectedPlan = searchParams.get("plan") || "bundle";
+  const selectedPlan = searchParams.get("plan") || "free";
   
   const [formData, setFormData] = useState({
     firstName: "",
