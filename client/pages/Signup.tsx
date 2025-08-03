@@ -37,7 +37,6 @@ export default function Signup() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { signUp } = useAuth();
 
   const plans = {
     free: { name: "Free Plan", price: "Free" },
