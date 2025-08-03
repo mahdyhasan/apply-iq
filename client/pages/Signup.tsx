@@ -74,38 +74,22 @@ export default function Signup() {
       return;
     }
 
-    try {
-      const userData = {
-        full_name: `${formData.firstName} ${formData.lastName}`,
-        plan: formData.plan,
-      };
+    // Demo signup - in production, this would send data to your MySQL backend
+    const userData = {
+      id: `user-${Date.now()}`,
+      email: formData.email,
+      full_name: `${formData.firstName} ${formData.lastName}`,
+      plan: formData.plan,
+      onboarding_completed: false,
+    };
 
-      await signUp(formData.email, formData.password, userData);
+    localStorage.setItem("user", JSON.stringify(userData));
 
-      // Show success message and redirect to onboarding
-      alert(
-        "Account created successfully! Please check your email for verification, then proceed to onboarding.",
-      );
-      navigate("/onboarding");
-    } catch (error: any) {
-      console.error("Signup error:", error);
+    // Success message
+    alert("Account created successfully! Proceeding to onboarding.");
+    navigate("/onboarding");
 
-      if (error.message?.includes("User already registered")) {
-        setError(
-          "An account with this email already exists. Please sign in instead.",
-        );
-      } else if (
-        error.message?.includes("Password should be at least 6 characters")
-      ) {
-        setError("Password must be at least 6 characters long.");
-      } else {
-        setError(
-          error.message || "An error occurred during signup. Please try again.",
-        );
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(false);
   };
 
   const handleInputChange = (field: string, value: string) => {
