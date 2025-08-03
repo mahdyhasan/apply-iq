@@ -19,7 +19,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { BrainCircuit, Eye, EyeOff, CheckCircle } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 
 export default function Signup() {
   const [searchParams] = useSearchParams();
