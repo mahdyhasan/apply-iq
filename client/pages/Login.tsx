@@ -23,46 +23,49 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!email || !password) {
-      setError("Please enter both email and password.");
-      return;
-    }
-
     setIsLoading(true);
     setError("");
 
-    try {
-      await signIn(email, password);
-
-      // Small delay to allow auth context to update
-      setTimeout(() => {
-        if (profile?.onboarding_completed) {
-          navigate("/dashboard");
-        } else {
-          navigate("/onboarding");
-        }
-      }, 1000);
-    } catch (error: any) {
-      console.error("Login error:", error);
-
-      // Handle specific error messages
-      if (error.message?.includes("Invalid login credentials")) {
-        setError(
-          "Invalid email or password. Please check your credentials or sign up.",
-        );
-      } else if (error.message?.includes("Email not confirmed")) {
-        setError(
-          "Please check your email and click the confirmation link before signing in.",
-        );
+    // Demo credentials for development
+    if (email === "user@applyiq.bd" && password === "demo123") {
+      const userData = {
+        id: "demo-user-1",
+        email,
+        full_name: "Demo User",
+        plan: "starter",
+        onboarding_completed: true,
+      };
+      localStorage.setItem("user", JSON.stringify(userData));
+      navigate("/dashboard");
+    } else if (email === "admin@applyiq.bd" && password === "admin123") {
+      const userData = {
+        id: "demo-admin-1",
+        email,
+        full_name: "Admin User",
+        plan: "elite",
+        onboarding_completed: true,
+        role: "admin",
+      };
+      localStorage.setItem("user", JSON.stringify(userData));
+      navigate("/admin-dashboard");
+    } else {
+      // For demo purposes, allow any email/password and send to onboarding
+      if (email && password) {
+        const userData = {
+          id: `user-${Date.now()}`,
+          email,
+          full_name: email.split("@")[0],
+          plan: "free",
+          onboarding_completed: false,
+        };
+        localStorage.setItem("user", JSON.stringify(userData));
+        navigate("/onboarding");
       } else {
-        setError(
-          error.message || "An error occurred during login. Please try again.",
-        );
+        setError("Please enter both email and password. Try user@applyiq.bd/demo123 for demo.");
       }
-    } finally {
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   };
 
   return (
