@@ -22,28 +22,25 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/dashboard" element={<PackageDashboard />} />
-            <Route path="/upgrade" element={<PackageUpgrade />} />
-            <Route path="/resume-builder" element={<ResumeBuilder />} />
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/supabase-test" element={<SupabaseTest />} />
-            <Route path="/demo" element={<NotFound />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/dashboard" element={<PackageDashboard />} />
+          <Route path="/upgrade" element={<PackageUpgrade />} />
+          <Route path="/resume-builder" element={<ResumeBuilder />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/demo" element={<NotFound />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
   </QueryClientProvider>
 );
 
